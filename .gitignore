@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.slidev/
+.source/
+.venv/
+slides-export.pdf
+*.log
+.DS_Store

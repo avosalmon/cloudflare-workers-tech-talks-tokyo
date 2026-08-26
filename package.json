@@ -1,0 +1,17 @@
+{
+  "name": "cloudflare-workers-tech-talk",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "slidev --open",
+    "build": "slidev build",
+    "export": "slidev export",
+    "format": "slidev format slides.md && prettier --write \"**/*.{css,vue,json}\" README.md"
+  },
+  "devDependencies": {
+    "@slidev/cli": "latest",
+    "@slidev/theme-default": "latest",
+    "playwright-chromium": "latest",
+    "prettier": "latest"
+  }
+}
