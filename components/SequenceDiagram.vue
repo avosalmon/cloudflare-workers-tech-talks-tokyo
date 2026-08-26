@@ -16,7 +16,12 @@ defineProps({
         <div>Worker</div>
         <div>Durable Object</div>
       </div>
-      <div class="lanes four"></div>
+      <div class="lanes four">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
       <div class="messages four">
         <div class="message c1-c2 row1 right">
           <b>POST</b> /translation/start
@@ -45,7 +50,12 @@ defineProps({
         <div>Worker</div>
         <div>Durable Object</div>
       </div>
-      <div class="lanes four"></div>
+      <div class="lanes four">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
       <div class="messages four">
         <div class="message c1-c2 row1 right"><b>GET</b> /events/{id}/live</div>
         <div class="message c2-c1 row2 left">{ websocket_url }</div>
@@ -66,7 +76,11 @@ defineProps({
         <div>Durable Object</div>
         <div>Translation API</div>
       </div>
-      <div class="lanes three"></div>
+      <div class="lanes three">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
       <div class="messages three">
         <div class="message c2-c1 row1 left">
           { status: <mark>"authenticated"</mark> }
@@ -89,7 +103,12 @@ defineProps({
         <div>Translation API</div>
         <div>Attendee</div>
       </div>
-      <div class="lanes four"></div>
+      <div class="lanes four">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
       <div class="messages four">
         <div class="message c1-c2 row1 right">binary audio</div>
         <div class="message c2-c3 row2 right">binary audio × N</div>
@@ -154,29 +173,19 @@ defineProps({
   width: 90%;
 }
 
-.lanes::before {
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent 0,
-    transparent calc(25% - 1px),
-    rgb(207 221 236 / 72%) calc(25% - 1px),
-    rgb(207 221 236 / 72%) calc(25% + 1px)
-  );
-  background-position-x: 12.5%;
-  content: "";
+.lanes > div {
+  position: relative;
 }
 
-.lanes.three::before {
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent 0,
-    transparent calc(33.333% - 1px),
-    rgb(207 221 236 / 72%) calc(33.333% - 1px),
-    rgb(207 221 236 / 72%) calc(33.333% + 1px)
-  );
-  background-position-x: 16.666%;
+.lanes > div::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: rgb(207 221 236 / 72%);
+  transform: translateX(-50%);
+  content: "";
 }
 
 .messages {
@@ -191,8 +200,10 @@ defineProps({
 }
 
 .message {
+  --span: 2;
   position: relative;
   align-self: center;
+  margin-inline: calc(50% / var(--span));
   padding: 0 1.8cqw 0.8cqh;
   border-bottom: 2px solid #c8d5e5;
   font-size: clamp(0.72rem, 1.12cqw, 1.46rem);
@@ -235,7 +246,7 @@ defineProps({
 
 .note {
   align-self: center;
-  padding-left: 1cqw;
+  padding-left: calc(50% + 1cqw);
   color: #c9d2dd;
   font-family: "Zen Kaku Gothic New", var(--deck-mono);
   font-size: clamp(0.68rem, 0.96cqw, 1.25rem);
@@ -259,6 +270,7 @@ defineProps({
   grid-column: 1 / 3;
 }
 .c1-c3 {
+  --span: 3;
   grid-column: 1 / 4;
 }
 .c3-c4 {
@@ -266,6 +278,7 @@ defineProps({
 }
 .c1-c4,
 .c4-c1 {
+  --span: 4;
   grid-column: 1 / 5;
 }
 .c2-c3,
@@ -273,6 +286,7 @@ defineProps({
   grid-column: 2 / 4;
 }
 .c2-c4 {
+  --span: 3;
   grid-column: 2 / 5;
 }
 .c4 {
