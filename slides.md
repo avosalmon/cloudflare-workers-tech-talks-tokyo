@@ -68,7 +68,10 @@ class: full
 ---
 
 <!-- 05 -->
-<img class="full-bleed" src="/assets/venue.jpg" alt="Laravel Live Japan venue">
+<div class="photo-frame">
+  <img class="full-bleed" src="/assets/venue.jpg" alt="Laravel Live Japan venue">
+  <img class="corner-logo" src="/assets/tech-world.png" alt="TECH WORLD">
+</div>
 
 ---
 layout: full

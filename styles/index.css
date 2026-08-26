@@ -236,6 +236,21 @@ html .slidev-layout .profile-copy p {
   object-fit: contain;
 }
 
+.photo-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.corner-logo {
+  position: absolute;
+  z-index: 2;
+  left: 3.4cqw;
+  bottom: 4cqh;
+  width: min(16cqw, 20rem);
+  height: auto;
+}
+
 .slidev-layout.live-japan,
 .slidev-layout.live-japan .full-bleed.contain {
   background: #ff3e2b;
