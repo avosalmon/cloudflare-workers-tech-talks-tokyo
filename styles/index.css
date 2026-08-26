@@ -434,21 +434,35 @@ html .slidev-layout .bullet-slide li {
 
 .auth-table {
   display: grid;
-  width: 78%;
+  width: 94%;
   overflow: hidden;
   border: 2px solid #9aa6b6;
-  border-radius: 1rem;
-  grid-template-columns: 1.05fr 1.15fr 1.3fr;
+  border-radius: 1.2rem;
+  grid-template-columns: 1.45fr 1.1fr 1.2fr;
   box-shadow: 0 0.8rem 2.5rem rgb(39 66 126 / 10%);
 }
 
 .auth-table > div {
-  min-height: 7.5cqh;
-  padding: 1.5cqh 1.4cqw;
+  display: flex;
+  min-height: 18cqh;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2.6cqh 2cqw;
   border-right: 1px solid #b9c1cc;
   border-bottom: 1px solid #b9c1cc;
-  font-size: clamp(1rem, 1.35cqw, 1.75rem);
-  line-height: 1.45;
+  font-size: clamp(1.8rem, 2.55cqw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: left;
+  word-break: keep-all;
+}
+
+.auth-table > div:nth-child(3n) {
+  border-right: 0;
+}
+
+.auth-table > div:nth-last-child(-n + 3) {
+  border-bottom: 0;
 }
 
 .auth-table .th {

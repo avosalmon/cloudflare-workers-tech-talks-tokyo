@@ -390,8 +390,8 @@ new WebSocket(url, {
 <div class="center-stage">
   <div class="auth-table">
     <div class="th">方法</div><div class="th">長所</div><div class="th">短所</div>
-    <div>URLのqueryにtoken</div><div class="good">handshake前に401を返せる</div><div class="bad">アクセスログにtokenが残る</div>
-    <div>接続後の最初のメッセージ</div><div class="good">ログにtokenが残らない</div><div class="bad">認証前にDOが起動し、WSが開く</div>
+    <div>URLのqueryにtoken</div><div class="good">handshake前に<br>401を返せる</div><div class="bad">アクセスログに<br>tokenが残る</div>
+    <div>接続後の最初のメッセージで<br>tokenを送る</div><div class="good">ログにtokenが<br>残らない</div><div class="bad">認証前にDOが起動し、<br>WSが開く</div>
   </div>
 </div>
 
