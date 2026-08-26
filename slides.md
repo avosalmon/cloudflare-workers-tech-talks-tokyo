@@ -176,7 +176,7 @@ class: full
 
 <!-- 15 -->
 <div class="concept-slide">
-  <h2>IDごとに専用のコンピュートとストレージを持てる<br>ステートフルなサーバーレスサービス</h2>
+  <h2>IDを指定すると、<br>専用のコンピュートと SQLite が付いてくる</h2>
   <DurableConcept kind="identity" />
 </div>
 

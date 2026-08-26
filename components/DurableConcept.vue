@@ -10,18 +10,17 @@ defineProps({
 <template>
   <div class="concept">
     <div v-if="kind === 'identity'" class="identity">
-      <div class="id-list">
-        <span>event:tokyo</span>
-        <span>event:sydney</span>
-        <span>event:paris</span>
+      <div class="identity-flow">
+        <div class="request-pill">eventId: tokyo-2026</div>
+        <div class="route-arrow"><strong>getByName(id)</strong></div>
+        <div class="object-card">
+          <span class="hex">DO</span>
+          <strong>専用コンピュート</strong>
+          <span class="separator">+</span>
+          <strong>専用 SQLite</strong>
+        </div>
       </div>
-      <div class="route-arrow"><strong>getByName(id)</strong></div>
-      <div class="object-card">
-        <span class="hex">DO</span>
-        <strong>専用コンピュート</strong>
-        <span class="separator">+</span>
-        <strong>専用 SQLite</strong>
-      </div>
+      <p class="identity-kicker">ステートフルなサーバーレス</p>
     </div>
 
     <div v-else-if="kind === 'bridge'" class="bridge">
@@ -174,25 +173,34 @@ defineProps({
   font-size: clamp(0.8rem, 1.15cqw, 1.5rem);
 }
 
-.identity,
+.identity {
+  display: grid;
+  width: 80%;
+  justify-items: stretch;
+  gap: 5cqh;
+}
+
+.identity-flow,
 .instances {
   display: grid;
   width: 80%;
   align-items: center;
-  grid-template-columns: 1fr 0.65fr 1.25fr;
+  grid-template-columns: 1.15fr 0.55fr 1.15fr;
   gap: 3cqw;
 }
 
-.instances {
-  grid-template-columns: 1.15fr 0.55fr 1.15fr;
+.identity-flow {
+  width: 100%;
 }
 
-.id-list {
-  display: grid;
-  gap: 1.4cqh;
+.identity-kicker {
+  margin: 0;
+  color: var(--deck-blue);
+  font-size: clamp(1.55rem, 2.5cqw, 3.1rem);
+  font-weight: 800;
+  text-align: center;
 }
 
-.id-list span,
 .request-pill {
   padding: 1.4cqh 1.2cqw;
   border: 2px solid #c7d2e6;
@@ -203,6 +211,7 @@ defineProps({
   font-weight: 700;
 }
 
+.identity .request-pill,
 .instances .request-pill {
   display: grid;
   min-height: 20cqh;
