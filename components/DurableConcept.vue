@@ -26,7 +26,6 @@ defineProps({
 
     <div v-else-if="kind === 'bridge'" class="bridge">
       <div class="endpoint browser">
-        <span class="endpoint-icon">A</span>
         <strong>Admin</strong>
         <small>WebSocket client</small>
       </div>
@@ -38,7 +37,6 @@ defineProps({
       </div>
       <div class="socket-line two-way"><span>WebSocket</span></div>
       <div class="endpoint api">
-        <span class="endpoint-icon">AI</span>
         <strong>Translation API</strong>
         <small>WebSocket server</small>
       </div>
@@ -267,28 +265,12 @@ defineProps({
   min-height: 20cqh;
   align-content: center;
   justify-items: center;
-  gap: 1.3cqh;
+  gap: 0.8cqh;
   padding: 2cqh 1cqw;
   border: 2px solid #c9d3e0;
   border-radius: 1.4cqw;
   background: #f9fbfe;
   text-align: center;
-}
-
-.endpoint-icon {
-  display: grid;
-  width: 5cqw;
-  height: 5cqw;
-  place-items: center;
-  border-radius: 50%;
-  background: #e8efff;
-  color: var(--deck-blue);
-  font-weight: 900;
-}
-
-.endpoint.api .endpoint-icon {
-  background: #e4f8f2;
-  color: #198264;
 }
 
 .socket-line {
