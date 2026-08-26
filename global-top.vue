@@ -7,6 +7,7 @@ import {
   reactive,
   ref,
 } from "vue";
+import { captionsVisible } from "./captions-visibility";
 
 const WEBSOCKET_URL =
   "wss://yoyo-translation-proxy.avosalmon.workers.dev/events/01a03df2-a5db-725c-9843-62976e7972be?lang=all";
@@ -273,7 +274,7 @@ onBeforeUnmount(() => {
 <template>
   <Transition name="translation-overlay">
     <aside
-      v-if="hasContent"
+      v-if="hasContent && captionsVisible"
       class="live-translation-overlay"
       aria-live="polite"
     >

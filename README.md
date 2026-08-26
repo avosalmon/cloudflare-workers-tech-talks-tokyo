@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-Use the arrow keys or space to advance. Press `o` for the slide overview and `p` for presenter mode.
+Use the arrow keys or space to advance. Press `o` for the slide overview, `p` for presenter mode, and `c` to show or hide live captions.
 
 ## Edit
 
