@@ -1,28 +1,41 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, reactive, ref } from "vue";
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+} from "vue";
 
 const WEBSOCKET_URL =
   "wss://yoyo-translation-proxy.avosalmon.workers.dev/events/01a03df2-a5db-725c-9843-62976e7972be?lang=all";
+const MAX_CHUNKS_PER_LANGUAGE = 24;
 const MAX_TRANSCRIPT_CHARACTERS = 2400;
 const RECONNECT_MAX_DELAY_MS = 30_000;
+const LANGUAGES = ["en", "ja"];
 
 const transcripts = reactive({
-  en: { final: "", interim: "" },
-  ja: { final: "", interim: "" },
+  en: { chunks: [], original: "", interim: "" },
+  ja: { chunks: [], original: "", interim: "" },
 });
 const connectionStatus = ref("connecting");
+const englishScroller = ref(null);
+const japaneseScroller = ref(null);
 
 let socket = null;
 let reconnectTimer = null;
 let reconnectAttempts = 0;
 let disposed = false;
+let nextChunkId = 1;
 
-const hasContent = computed(
-  () =>
-    transcripts.en.final.length > 0 ||
-    transcripts.en.interim.length > 0 ||
-    transcripts.ja.final.length > 0 ||
-    transcripts.ja.interim.length > 0,
+const hasContent = computed(() =>
+  LANGUAGES.some(
+    (language) =>
+      transcripts[language].chunks.length > 0 ||
+      transcripts[language].original.length > 0 ||
+      transcripts[language].interim.length > 0,
+  ),
 );
 
 function normalizeLanguage(language) {
@@ -30,14 +43,6 @@ function normalizeLanguage(language) {
 
   const normalized = language.toLowerCase().split("-")[0];
   return normalized === "en" || normalized === "ja" ? normalized : null;
-}
-
-function trimTranscript(text) {
-  if (text.length <= MAX_TRANSCRIPT_CHARACTERS) return text;
-
-  const tail = text.slice(-MAX_TRANSCRIPT_CHARACTERS);
-  const firstBoundary = Math.max(tail.indexOf("\n"), tail.indexOf(" "));
-  return firstBoundary > 0 ? tail.slice(firstBoundary + 1) : tail;
 }
 
 function isTranslationToken(value) {
@@ -49,10 +54,44 @@ function isTranslationToken(value) {
   );
 }
 
+function resetTranscripts() {
+  for (const language of LANGUAGES) {
+    transcripts[language].chunks = [];
+    transcripts[language].original = "";
+    transcripts[language].interim = "";
+  }
+}
+
+function trimOriginal(text) {
+  if (text.length <= MAX_TRANSCRIPT_CHARACTERS) return text;
+
+  const tail = text.slice(-MAX_TRANSCRIPT_CHARACTERS);
+  const firstBoundary = Math.max(tail.indexOf("\n"), tail.indexOf(" "));
+  return firstBoundary > 0 ? tail.slice(firstBoundary + 1) : tail;
+}
+
+function pushChunk(language, text) {
+  const trimmed = text.trim();
+  if (trimmed.length === 0) return;
+
+  transcripts[language].chunks.push({
+    id: nextChunkId,
+    text: trimmed,
+  });
+  nextChunkId += 1;
+
+  if (transcripts[language].chunks.length > MAX_CHUNKS_PER_LANGUAGE) {
+    transcripts[language].chunks.splice(
+      0,
+      transcripts[language].chunks.length - MAX_CHUNKS_PER_LANGUAGE,
+    );
+  }
+}
+
 function applyTranslationTokens(tokens) {
   const incoming = {
-    en: { final: "", interim: "" },
-    ja: { final: "", interim: "" },
+    en: { translation: "", originals: [], interim: "" },
+    ja: { translation: "", originals: [], interim: "" },
   };
   const touchedLanguages = new Set();
 
@@ -64,13 +103,15 @@ function applyTranslationTokens(tokens) {
 
     touchedLanguages.add(language);
 
-    if (token.text === "<p>") {
-      incoming[language].final += "\n";
+    if (token.text === "<p>") continue;
+
+    if (token.translation_status === "translation") {
+      incoming[language].translation += token.text;
       continue;
     }
 
-    if (token.is_final || token.translation_status === "translation") {
-      incoming[language].final += token.text;
+    if (token.is_final) {
+      incoming[language].originals.push(token.text);
     } else {
       incoming[language].interim += token.text;
     }
@@ -78,12 +119,21 @@ function applyTranslationTokens(tokens) {
 
   for (const language of touchedLanguages) {
     const update = incoming[language];
-    if (update.final.length > 0) {
-      transcripts[language].final = trimTranscript(
-        transcripts[language].final + update.final,
+    let addedTranslation = false;
+
+    if (update.translation.length > 0) {
+      pushChunk(language, update.translation);
+      addedTranslation = true;
+    }
+
+    for (const text of update.originals) {
+      transcripts[language].original = trimOriginal(
+        transcripts[language].original + text,
       );
     }
+
     transcripts[language].interim = update.interim;
+    scrollLanguage(language, addedTranslation ? "smooth" : "auto");
   }
 }
 
@@ -110,10 +160,7 @@ function handleMessage(event) {
   }
 
   if (message.type === "session_changed") {
-    transcripts.en.final = "";
-    transcripts.en.interim = "";
-    transcripts.ja.final = "";
-    transcripts.ja.interim = "";
+    resetTranscripts();
     return;
   }
 
@@ -179,6 +226,27 @@ function connect() {
   });
 }
 
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function scrollLanguage(language, behavior) {
+  const scrollBehavior = prefersReducedMotion() ? "auto" : behavior;
+  const scrollerRef = language === "en" ? englishScroller : japaneseScroller;
+
+  nextTick(() => {
+    requestAnimationFrame(() => {
+      const scroller = scrollerRef.value;
+      if (scroller === null) return;
+
+      scroller.scrollTo({
+        top: scroller.scrollHeight,
+        behavior: scrollBehavior,
+      });
+    });
+  });
+}
+
 function handleVisibilityChange() {
   if (document.visibilityState === "visible") connect();
 }
@@ -211,22 +279,56 @@ onBeforeUnmount(() => {
     >
       <section class="translation-column english">
         <div class="translation-copy">
-          <div class="translation-viewport">
-            <p>
-              <span>{{ transcripts.en.final }}</span>
-              <span>{{ transcripts.en.interim }}</span>
-            </p>
+          <div ref="englishScroller" class="translation-viewport">
+            <div class="translation-chunks">
+              <p
+                v-for="chunk in transcripts.en.chunks"
+                :key="chunk.id"
+                class="translation-chunk"
+              >
+                <span>{{ chunk.text }}</span>
+              </p>
+              <p
+                v-if="
+                  transcripts.en.original.length > 0 ||
+                  transcripts.en.interim.length > 0
+                "
+                class="translation-chunk"
+              >
+                <span
+                  >{{ transcripts.en.original
+                  }}{{ transcripts.en.interim }}</span
+                >
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       <section class="translation-column japanese" lang="ja">
         <div class="translation-copy">
-          <div class="translation-viewport">
-            <p>
-              <span>{{ transcripts.ja.final }}</span>
-              <span>{{ transcripts.ja.interim }}</span>
-            </p>
+          <div ref="japaneseScroller" class="translation-viewport">
+            <div class="translation-chunks">
+              <p
+                v-for="chunk in transcripts.ja.chunks"
+                :key="chunk.id"
+                class="translation-chunk"
+              >
+                <span>{{ chunk.text }}</span>
+              </p>
+              <p
+                v-if="
+                  transcripts.ja.original.length > 0 ||
+                  transcripts.ja.interim.length > 0
+                "
+                class="translation-chunk"
+              >
+                <span
+                  >{{ transcripts.ja.original
+                  }}{{ transcripts.ja.interim }}</span
+                >
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -277,12 +379,30 @@ onBeforeUnmount(() => {
   display: flex;
   height: 3lh;
   flex-direction: column;
-  justify-content: flex-end;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  overflow-anchor: none;
+}
+
+.translation-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.translation-chunks {
+  display: flex;
+  margin-top: auto;
+  flex-direction: column;
+  gap: 0.2em;
+}
+
+.translation-chunk {
+  margin: 0;
   overflow: hidden;
 }
 
-.translation-copy p {
-  margin: 0;
+.translation-chunk span {
+  display: block;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
