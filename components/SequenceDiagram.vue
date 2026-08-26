@@ -121,7 +121,7 @@ defineProps({
           <mark>"translated text..."</mark> }
         </div>
         <div class="note c4 row5-note">?lang=ja</div>
-        <div class="callout">en の結果は ja 購読者には送らない</div>
+        <div class="callout row6">en の結果は ja 購読者には送らない</div>
       </div>
     </template>
   </div>
@@ -246,10 +246,12 @@ defineProps({
 }
 
 .callout {
-  position: absolute;
-  right: 25%;
-  bottom: 1%;
-  padding: 1cqh 1cqw;
+  --span: 3;
+  grid-column: 2 / 5;
+  align-self: start;
+  margin-top: 1.2cqh;
+  margin-left: calc(50% / var(--span) + 1.8cqw);
+  padding: 0.4cqh 1cqw 0.2cqh;
   border-left: 0.35cqw solid var(--deck-violet);
   color: #cbd5e2;
   font-family: "Zen Kaku Gothic New", sans-serif;
