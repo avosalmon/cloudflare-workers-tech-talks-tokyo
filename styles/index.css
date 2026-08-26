@@ -318,6 +318,7 @@ html .slidev-layout .bullet-slide li {
 .future-list {
   display: grid;
   width: 75%;
+  margin-top: 5cqh;
   gap: 4cqh;
 }
 
