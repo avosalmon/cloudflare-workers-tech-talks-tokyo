@@ -272,29 +272,47 @@ html .slidev-layout .profile-copy p {
   height: 100%;
   min-height: 0;
   align-content: start;
-  grid-template-rows: auto auto;
-  gap: 10cqh;
+  grid-template-rows: auto 1fr;
+  gap: 5.5cqh;
 }
 
 .feature-grid {
   display: grid;
+  align-content: center;
   grid-template-columns: repeat(5, 1fr);
-  gap: 7.5cqh 3.6cqw;
+  gap: 2.6cqh 2cqw;
 }
 
 .feature-chip {
   display: grid;
-  min-height: 18cqh;
+  min-height: 16cqh;
   place-items: center;
   padding: 1.2cqh 1cqw;
-  border: 2px solid #a8a8a8;
-  border-radius: 1rem;
-  background: rgb(255 255 255 / 82%);
-  box-shadow: 0 0.25rem 0.35rem rgb(0 0 0 / 10%);
-  color: #5b5b5b;
-  font-size: clamp(1rem, 1.55cqw, 2rem);
-  font-weight: 700;
+  border: 1.5px solid rgb(49 83 164 / 14%);
+  border-radius: 1.15cqw;
+  background: linear-gradient(180deg, #fff 0%, #f3f6fd 100%);
+  box-shadow:
+    inset 0.42cqw 0 0 var(--deck-red),
+    0 1cqh 2.4cqh rgb(49 83 164 / 10%);
+  color: var(--deck-blue);
+  font-size: clamp(1.12rem, 1.72cqw, 2.15rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
   text-align: center;
+  animation: feature-chip-in 0.45s ease both;
+  animation-delay: calc(var(--i, 0) * 38ms);
+}
+
+@keyframes feature-chip-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.7cqh);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .bullet-slide {
@@ -549,15 +567,15 @@ html .slidev-layout .closing .url {
 
 @media (max-height: 600px) {
   .feature-slide {
-    gap: 3.5cqh;
+    gap: 3.2cqh;
   }
 
   .feature-grid {
-    gap: 2.8cqh 2.6cqw;
+    gap: 1.8cqh 1.6cqw;
   }
 
   .feature-chip {
-    min-height: 11cqh;
+    min-height: 12cqh;
   }
 
   .bullet-slide {

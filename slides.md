@@ -121,11 +121,11 @@ class: full
 <div class="feature-slide">
   <h2>Laravel には何でもある</h2>
   <div class="feature-grid">
-    <div v-for="feature in [
+    <div v-for="(feature, i) in [
       'Auth', 'ORM', 'Cache', 'Queue', 'Validation',
       'WebSocket', 'Notification', 'Task Scheduling', 'Billing', 'File Storage',
       'AI SDK', 'Localization', 'Testing', 'Inertia.js', 'Vite Plugin',
-    ]" :key="feature" class="feature-chip">{{ feature }}</div>
+    ]" :key="feature" class="feature-chip" :style="{ '--i': i }">{{ feature }}</div>
   </div>
 </div>
 
@@ -140,7 +140,7 @@ class: full
 ---
 
 <!-- 12 -->
-<img class="full-bleed contain" src="/assets/laravel-cloud.png" alt="Laravel Cloud">
+<img class="full-bleed" src="/assets/laravel-cloud.png" alt="Laravel Cloud">
 
 <!--
 Laravel
