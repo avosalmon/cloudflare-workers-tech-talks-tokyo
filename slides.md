@@ -119,7 +119,7 @@ class: full
 
 <!-- 11 -->
 <div class="feature-slide">
-  <h2>Laravel にはほぼ全部ある</h2>
+  <h2>Laravel には何でもある</h2>
   <div class="feature-grid">
     <div v-for="feature in [
       'Auth', 'ORM', 'Cache', 'Queue', 'Validation',
@@ -233,7 +233,10 @@ class: full
 
 <!-- 21 -->
 <div class="concept-slide">
-  <h2>👉 世界のどこでイベントが開催されても<br>レイテンシーを小さくできる</h2>
+  <h2 class="heading-with-mark">
+    <span class="heading-mark">👉</span>
+    <span>世界のどこでイベントが開催されても<br>レイテンシーを小さくできる</span>
+  </h2>
   <DurableConcept kind="latency" />
 </div>
 
@@ -245,7 +248,7 @@ class: full
   <ul>
     <li>ローカルで簡単に動かせる（wrangler dev）</li>
     <li>デプロイがめっちゃ簡単（wrangler deploy）</li>
-    <li>使っていない間はhibernateする</li>
+    <li>使っていない間は hibernate する</li>
     <li>インスタンスごとに専用のSQLiteに状態を永続化</li>
   </ul>
 </div>
