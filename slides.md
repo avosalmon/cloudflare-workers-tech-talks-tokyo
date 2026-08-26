@@ -317,29 +317,7 @@ class: dark code-stage
 
 <!-- 26 -->
 
-```ts
-export class EventSession extends DurableObject<Env> {
-  async fetch(request: Request): Promise<Response> {
-    const pair = new WebSocketPair();
-    const [client, server] = Object.values(pair);
-
-    this.ctx.acceptWebSocket(server);
-    server.serializeAttachment({ authenticated: false });
-
-    return new Response(null, { status: 101, webSocket: client });
-  }
-
-  // ...
-}
-```
-
----
-class: dark code-stage
----
-
-<!-- 27 -->
-
-```ts {6-7}
+```ts {all|6-7}
 export class EventSession extends DurableObject<Env> {
   async fetch(request: Request): Promise<Response> {
     const pair = new WebSocketPair();
