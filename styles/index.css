@@ -374,8 +374,8 @@ html .slidev-layout .bullet-slide li {
 .auth-slide {
   display: grid;
   height: 100%;
-  align-content: center;
-  gap: 6cqh;
+  align-content: start;
+  gap: 10cqh;
 }
 
 .auth-snippet {
