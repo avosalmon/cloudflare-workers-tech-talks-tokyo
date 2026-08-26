@@ -185,7 +185,10 @@ const uid = useId();
       </g>
 
       <!-- Durable Object -->
-      <g class="node" :class="{ focused: focus === 'durable' }">
+      <g
+        class="node server"
+        :class="{ focused: focus === 'durable' }"
+      >
         <rect class="node-bg" x="525" y="255" width="230" height="120" rx="16" />
         <text
           class="node-title"
@@ -322,6 +325,11 @@ marker path {
   fill: #283b5d;
   stroke: #283b5d;
   stroke-width: 2;
+}
+
+.node.server.focused .node-bg {
+  fill: #c94c3c;
+  stroke: #b84336;
 }
 
 .node-title {
