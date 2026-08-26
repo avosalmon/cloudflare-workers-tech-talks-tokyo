@@ -9,6 +9,7 @@ aspectRatio: 16/9
 canvasWidth: 1920
 transition: fade-out
 mdc: true
+layout: default
 ---
 
 <!-- 01 -->
@@ -48,7 +49,7 @@ Laravelエンジニアの自分がなぜ今日ここにいるのか
 
 ---
 layout: full
-class: full
+class: full live-japan
 ---
 
 <!-- 04 -->

@@ -14,6 +14,9 @@
   --deck-cyan: #8be9d0;
   --deck-violet: #c792ea;
   --deck-yellow: #ffcb6b;
+  --deck-sans:
+    "Inter", "Zen Kaku Gothic New", "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN", "Helvetica Neue", sans-serif;
   --deck-mono: Menlo, Monaco, "Courier New", monospace;
 }
 
@@ -32,7 +35,7 @@ body,
 body {
   margin: 0;
   color: var(--deck-ink);
-  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--deck-sans);
 }
 
 .slidev-layout {
@@ -43,6 +46,7 @@ body {
   overflow: hidden;
   background: linear-gradient(112deg, #294a9c 0%, #3153a4 58%, #c691bb 100%);
   color: var(--deck-ink);
+  font-family: var(--deck-sans);
   container-type: size;
 }
 
@@ -86,27 +90,28 @@ body {
   margin: 0;
 }
 
-.slidev-layout h1,
-.slidev-layout h2,
-.slidev-layout h3,
+html .slidev-layout h1,
+html .slidev-layout h2,
+html .slidev-layout h3,
 .jp {
-  font-family: "Zen Kaku Gothic New", "Helvetica Neue", sans-serif;
+  font-family: var(--deck-sans);
 }
 
-.slidev-layout h1 {
+html .slidev-layout h1 {
+  margin: 0;
   color: var(--deck-blue);
-  font-size: clamp(3rem, 5.4cqw, 6.5rem);
-  font-weight: 900;
-  letter-spacing: -0.045em;
-  line-height: 1.28;
+  font-size: clamp(3.4rem, 6.7cqw, 8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
 }
 
-.slidev-layout h2 {
+html .slidev-layout h2 {
   color: var(--deck-blue);
-  font-size: clamp(2.35rem, 4.1cqw, 5rem);
-  font-weight: 900;
-  letter-spacing: -0.035em;
-  line-height: 1.22;
+  font-size: clamp(2.5rem, 4.4cqw, 5.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.16;
 }
 
 .slidev-layout h3 {
@@ -152,9 +157,13 @@ body {
   padding: 1.5% 1%;
 }
 
-.deck-title h1 {
+html .slidev-layout .deck-title h1 {
   align-self: center;
-  max-width: 95%;
+  max-width: 100%;
+  font-size: clamp(3.2rem, 5.65cqw, 7.5rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.32;
 }
 
 .deck-meta {
@@ -162,8 +171,9 @@ body {
   justify-content: space-between;
   gap: 2rem;
   color: #303238;
-  font-size: clamp(1.2rem, 2.05cqw, 2.5rem);
-  font-weight: 500;
+  font-family: "Inter", "Helvetica Neue", sans-serif;
+  font-size: clamp(1.05rem, 1.72cqw, 2.05rem);
+  font-weight: 400;
 }
 
 .profile {
@@ -171,31 +181,40 @@ body {
   width: 100%;
   height: 100%;
   align-items: center;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 6%;
-  padding: 0 4%;
+  grid-template-columns: 1fr auto;
+  gap: 7cqw;
+  padding: 0 8cqw 0 4.4cqw;
 }
 
 .profile-copy {
-  display: grid;
-  gap: clamp(0.8rem, 2.4cqh, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 3.2cqh;
 }
 
-.profile-copy h2 {
+html .slidev-layout .profile-copy h2 {
   font-family: "Inter", sans-serif;
+  font-size: clamp(3.4rem, 6cqw, 7.2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 
-.profile-copy p {
-  font-size: clamp(1.5rem, 2.4cqw, 3rem);
+html .slidev-layout .profile-copy p {
+  color: #1a1c20;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(1.45rem, 2.5cqw, 3rem);
+  font-weight: 400;
+  line-height: 1.2;
 }
 
 .profile-photo {
-  width: min(31cqw, 31cqh);
-  height: min(31cqw, 31cqh);
-  justify-self: center;
-  border: 0.5rem solid rgb(255 255 255 / 75%);
+  width: min(30.1cqw, 58cqh);
+  height: min(30.1cqw, 58cqh);
+  justify-self: end;
+  border: 0;
   border-radius: 50%;
-  box-shadow: 0 1rem 3rem rgb(36 69 143 / 18%);
+  box-shadow: none;
   object-fit: cover;
 }
 
@@ -215,6 +234,11 @@ body {
 .full-bleed.contain {
   background: #fff;
   object-fit: contain;
+}
+
+.slidev-layout.live-japan,
+.slidev-layout.live-japan .full-bleed.contain {
+  background: #ff3e2b;
 }
 
 .section-title {
@@ -266,7 +290,7 @@ body {
 
 .bullet-slide li {
   color: #050505;
-  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-family: var(--deck-sans);
   font-size: clamp(1.55rem, 2.55cqw, 3.25rem);
   font-weight: 700;
 }
@@ -283,9 +307,9 @@ body {
   align-items: center;
   gap: 1.4cqw;
   color: #101318;
-  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-family: var(--deck-sans);
   font-size: clamp(1.8rem, 3cqw, 3.8rem);
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .future-icon {
@@ -438,12 +462,12 @@ body {
 }
 
 .closing h1 {
-  font-family: "Inter", "Zen Kaku Gothic New", sans-serif;
+  font-family: var(--deck-sans);
   font-size: clamp(3.2rem, 6.6cqw, 8rem);
 }
 
-.closing .url {
-  letter-spacing: -0.055em;
+html .slidev-layout .closing .url {
+  letter-spacing: 0;
 }
 
 .slidev-layout.full .slidev-page,

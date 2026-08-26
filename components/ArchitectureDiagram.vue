@@ -1,5 +1,7 @@
 <script setup>
-const props = defineProps({
+import { useId } from "vue";
+
+defineProps({
   focus: {
     type: String,
     default: "",
@@ -9,420 +11,359 @@ const props = defineProps({
     default: false,
   },
 });
+
+const uid = useId();
 </script>
 
 <template>
-  <div class="architecture" :class="{ 'has-labels': labels }">
-    <div class="top-flow">
-      <span class="flow-caption">Start translation</span>
-      <span class="flow-line"></span>
-      <div class="node web" :class="{ focused: focus === 'web' }">
-        <span v-if="labels" class="stack-label laravel"
-          >Laravel / Inertia / React</span
+  <div class="architecture">
+    <svg
+      class="diagram"
+      viewBox="25 20 1150 620"
+      role="img"
+      aria-label="Live translation system architecture"
+    >
+      <defs>
+        <marker
+          :id="`${uid}-arrow`"
+          viewBox="0 0 10 10"
+          refX="8.5"
+          refY="5"
+          markerWidth="7"
+          markerHeight="7"
+          orient="auto-start-reverse"
         >
-        <span class="node-icon">L</span>
-        <strong>Web App</strong>
-      </div>
-      <span class="mini-arrow"></span>
-      <div class="database">
-        <span class="db-disc"></span>
-        <span class="db-disc"></span>
-        <span class="db-disc"></span>
-        <small>Postgres</small>
-      </div>
-    </div>
+          <path d="M1 1.5 8.5 5 1 8.5Z" />
+        </marker>
+      </defs>
 
-    <div class="main-flow">
-      <div class="microphone" aria-label="Microphone">
-        <span class="mic-head"></span>
-        <span class="mic-stand"></span>
-      </div>
-      <div class="arrow one-way"><span>Audio</span></div>
-      <div class="laptop" aria-label="Admin laptop">
-        <span class="screen"></span>
-        <span class="base"></span>
-      </div>
-      <div class="duplex">
-        <div class="arrow right"><span>Audio</span></div>
-        <div class="arrow left"><span>Translation</span></div>
-      </div>
-      <div class="node durable" :class="{ focused: focus === 'durable' }">
-        <span v-if="labels" class="stack-label worker"
-          >Cloudflare Workers + DO</span
-        >
-        <span class="node-icon">DO</span>
-        <strong>WebSocket Server</strong>
-      </div>
-      <div class="duplex">
-        <div class="arrow right"><span>Audio</span></div>
-        <div class="arrow left"><span>Translation</span></div>
-      </div>
-      <div class="node api" :class="{ focused: focus === 'api' }">
-        <span class="node-icon">AI</span>
-        <strong>Translation API</strong>
-      </div>
-    </div>
+      <text class="lane-label" x="470" y="39">APPLICATION</text>
+      <text class="lane-label" x="475" y="234">REALTIME PIPELINE</text>
+      <text class="lane-label" x="410" y="484">LIVE AUDIENCE</text>
 
-    <div class="client-flow">
-      <span class="socket-label">WebSocket</span>
-      <span class="client-trunk"></span>
-      <div class="phones">
-        <div class="phone">
-          <span class="phone-screen">あ</span>
-          <small>Japanese</small>
-        </div>
-        <div class="phone">
-          <span class="phone-screen">中</span>
-          <small>Chinese</small>
-        </div>
-        <div class="phone">
-          <span class="phone-screen">한</span>
-          <small>Korean</small>
-        </div>
-      </div>
-    </div>
+      <!-- Control flow: admin → Laravel → Postgres. -->
+      <path
+        class="connector"
+        d="M254 278V102Q254 91 265 91H470"
+        :marker-end="`url(#${uid}-arrow)`"
+      />
+      <path
+        class="connector return"
+        d="M470 132H296Q278 132 278 150V278"
+        :marker-end="`url(#${uid}-arrow)`"
+      />
+      <text class="route-label" x="351" y="77" text-anchor="middle">
+        START TRANSLATION
+      </text>
+      <text class="route-label" x="374" y="157" text-anchor="middle">
+        WEBSOCKET URL + TOKEN
+      </text>
+      <path
+        class="connector"
+        d="M670 111H790"
+        :marker-end="`url(#${uid}-arrow)`"
+      />
 
-    <div class="token-flow">
-      <span class="token-line"></span>
-      <span>WebSocket URL + token</span>
-    </div>
+      <!-- Audio enters the browser. -->
+      <path
+        class="connector"
+        d="M122 321H205"
+        :marker-end="`url(#${uid}-arrow)`"
+      />
+      <text class="route-label" x="164" y="304" text-anchor="middle">AUDIO</text>
+
+      <!-- Browser ⇄ Durable Object. -->
+      <path
+        class="connector data"
+        d="M315 296H475"
+        :marker-end="`url(#${uid}-arrow)`"
+      />
+      <path
+        class="connector return"
+        d="M475 344H315"
+        :marker-end="`url(#${uid}-arrow)`"
+      />
+      <text class="route-label" x="395" y="279" text-anchor="middle">AUDIO</text>
+      <text class="protocol-label" x="395" y="324" text-anchor="middle">
+        WEBSOCKET
+      </text>
+      <text class="route-label" x="395" y="370" text-anchor="middle">
+        TRANSLATION
+      </text>
+
+      <!-- Durable Object ⇄ translation service. -->
+      <path
+        class="connector data"
+        d="M705 296H940"
+        :marker-end="`url(#${uid}-arrow)`"
+      />
+      <path
+        class="connector return"
+        d="M940 344H705"
+        :marker-end="`url(#${uid}-arrow)`"
+      />
+      <text class="route-label" x="822" y="279" text-anchor="middle">AUDIO</text>
+      <text class="protocol-label" x="822" y="324" text-anchor="middle">
+        WEBSOCKET
+      </text>
+      <text class="route-label" x="822" y="370" text-anchor="middle">
+        TRANSLATION
+      </text>
+
+      <!-- Durable Object → attendee fan-out. -->
+      <path class="connector" d="M590 375V444Q590 454 580 454H442" />
+      <path class="connector" d="M590 454H738Q748 454 748 464V490" />
+      <path
+        class="connector"
+        d="M442 454V490"
+        :marker-end="`url(#${uid}-arrow)`"
+      />
+      <path
+        class="connector"
+        d="M590 454V490"
+        :marker-end="`url(#${uid}-arrow)`"
+      />
+      <path
+        class="connector"
+        d="M748 464V490"
+        :marker-end="`url(#${uid}-arrow)`"
+      />
+      <text class="protocol-label" x="590" y="430" text-anchor="middle">
+        WEBSOCKET
+      </text>
+
+      <!-- Laravel application -->
+      <g class="node" :class="{ focused: focus === 'web' }">
+        <rect class="node-bg" x="470" y="61" width="200" height="100" rx="14" />
+        <text class="node-title" x="495" y="104">Web App</text>
+        <text class="node-detail" x="495" y="132">
+          {{ labels ? "Laravel / Inertia / React" : "Laravel application" }}
+        </text>
+      </g>
+
+      <!-- Postgres -->
+      <g class="node database">
+        <rect class="node-bg" x="790" y="61" width="190" height="100" rx="14" />
+        <g transform="translate(812 80)">
+          <ellipse class="db-shape" cx="27" cy="10" rx="25" ry="9" />
+          <path class="db-shape" d="M2 10v36c0 5 11 10 25 10s25-5 25-10V10" />
+          <path class="db-divider" d="M2 23c0 5 11 10 25 10s25-5 25-10M2 36c0 5 11 10 25 10s25-5 25-10" />
+        </g>
+        <text class="node-title" x="882" y="105">Postgres</text>
+        <text class="node-detail" x="882" y="132">Application data</text>
+      </g>
+
+      <!-- Microphone -->
+      <g class="microphone" transform="translate(57 278)">
+        <rect x="22" width="32" height="59" rx="16" />
+        <path d="M10 42a28 28 0 0 0 56 0M38 70v27M21 97h34" />
+      </g>
+
+      <!-- Admin laptop -->
+      <g class="laptop" transform="translate(205 278)">
+        <rect class="device-shell" x="8" width="102" height="66" rx="6" />
+        <rect class="device-screen" x="17" y="9" width="84" height="48" rx="2" />
+        <path class="laptop-base" d="M1 66h116l14 17H-13Z" />
+        <text class="device-label" x="59" y="112" text-anchor="middle">
+          ADMIN / SPEAKER
+        </text>
+      </g>
+
+      <!-- Durable Object -->
+      <g class="node core" :class="{ focused: focus === 'durable' }">
+        <rect class="node-bg" x="475" y="255" width="230" height="120" rx="16" />
+        <text class="node-title" x="503" y="306">WebSocket Server</text>
+        <text class="node-detail" x="503" y="337">
+          {{ labels ? "Workers + Durable Objects" : "Durable Object per event" }}
+        </text>
+      </g>
+
+      <!-- Translation service -->
+      <g class="node" :class="{ focused: focus === 'api' }">
+        <rect class="node-bg" x="940" y="255" width="220" height="120" rx="16" />
+        <text class="node-title" x="968" y="306">Translation API</text>
+        <text class="node-detail" x="968" y="337">Speech → translated text</text>
+      </g>
+
+      <!-- Audience devices -->
+      <g class="phone" transform="translate(410 490)">
+        <rect class="phone-shell" width="64" height="96" rx="10" />
+        <rect class="phone-screen" x="7" y="8" width="50" height="69" rx="4" />
+        <circle class="phone-home" cx="32" cy="87" r="3" />
+        <text class="language" x="32" y="51" text-anchor="middle">あ</text>
+        <text class="device-label" x="32" y="122" text-anchor="middle">
+          JAPANESE
+        </text>
+      </g>
+      <g class="phone" transform="translate(558 490)">
+        <rect class="phone-shell" width="64" height="96" rx="10" />
+        <rect class="phone-screen" x="7" y="8" width="50" height="69" rx="4" />
+        <circle class="phone-home" cx="32" cy="87" r="3" />
+        <text class="language" x="32" y="51" text-anchor="middle">中</text>
+        <text class="device-label" x="32" y="122" text-anchor="middle">
+          CHINESE
+        </text>
+      </g>
+      <g class="phone" transform="translate(716 490)">
+        <rect class="phone-shell" width="64" height="96" rx="10" />
+        <rect class="phone-screen" x="7" y="8" width="50" height="69" rx="4" />
+        <circle class="phone-home" cx="32" cy="87" r="3" />
+        <text class="language" x="32" y="51" text-anchor="middle">한</text>
+        <text class="device-label" x="32" y="122" text-anchor="middle">
+          KOREAN
+        </text>
+      </g>
+    </svg>
   </div>
 </template>
 
 <style scoped>
 .architecture {
-  position: relative;
+  display: grid;
   width: 100%;
   height: 100%;
-  min-height: 62cqh;
-  color: #3b4553;
+  place-items: center;
+  overflow: hidden;
   font-family: "Inter", sans-serif;
 }
 
-.architecture strong,
-.architecture small,
-.architecture span {
-  font-size: clamp(0.7rem, 1.05cqw, 1.35rem);
-}
-
-.top-flow {
-  position: absolute;
-  top: 2%;
-  left: 24%;
-  display: flex;
-  width: 53%;
-  height: 22%;
-  align-items: center;
-  gap: 1.2cqw;
-}
-
-.flow-caption {
-  position: absolute;
-  top: 1%;
-  left: 12%;
-  color: #5e6978;
-}
-
-.flow-line {
-  width: 27%;
-  height: 2px;
-  background: #8b97a6;
-}
-
-.flow-line::after,
-.mini-arrow::after {
-  display: block;
-  width: 0;
-  height: 0;
-  margin-top: -5px;
-  margin-left: auto;
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-  border-left: 9px solid #8b97a6;
-  content: "";
-}
-
-.node {
-  position: relative;
-  display: grid;
-  min-width: 15cqw;
-  height: 11cqh;
-  align-items: center;
-  padding: 1.2cqh 1.3cqw;
-  border: 2px solid #cad2dd;
-  border-radius: 0.8cqw;
-  background: rgb(255 255 255 / 92%);
-  grid-template-columns: auto 1fr;
-  gap: 0.8cqw;
-  text-align: center;
-}
-
-.node.focused {
-  border-color: var(--deck-red);
-  background: #fff0f2;
-  box-shadow: 0 0 0 0.45cqw rgb(239 83 100 / 12%);
-}
-
-.node-icon {
-  display: grid;
-  width: 3.2cqw;
-  height: 3.2cqw;
-  place-items: center;
-  border-radius: 0.7cqw;
-  background: #edf2ff;
-  color: var(--deck-blue);
-  font-size: clamp(0.65rem, 0.88cqw, 1.1rem) !important;
-  font-weight: 800;
-}
-
-.durable .node-icon {
-  background: #fff1e8;
-  color: var(--deck-orange);
-}
-
-.api .node-icon {
-  background: #e8faf4;
-  color: #188564;
-}
-
-.stack-label {
-  position: absolute;
-  top: -3.3cqh;
-  left: 0;
+.diagram {
   width: 100%;
-  color: var(--deck-red);
-  font-size: clamp(0.62rem, 0.9cqw, 1.15rem) !important;
-  font-weight: 700;
-  white-space: nowrap;
+  height: 100%;
+  overflow: visible;
 }
 
-.mini-arrow {
-  width: 3.5cqw;
-  height: 2px;
-  background: #8b97a6;
+.connector {
+  fill: none;
+  stroke: #647083;
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.database {
-  position: relative;
-  display: flex;
-  width: 6cqw;
-  height: 9cqh;
-  flex-direction: column;
-  justify-content: center;
+.connector.return {
+  stroke-dasharray: 5 5;
 }
 
-.db-disc {
-  display: block;
-  width: 4.5cqw;
-  height: 2.4cqh;
-  margin-top: -0.35cqh;
-  border-radius: 50%;
-  background: #555;
-  box-shadow: inset 0 -0.45cqh 0 #333;
+marker path {
+  fill: #647083;
 }
 
-.database small {
-  position: absolute;
-  top: 100%;
-  left: -0.4cqw;
+.lane-label,
+.route-label,
+.protocol-label,
+.device-label {
+  fill: #697486;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.25px;
 }
 
-.main-flow {
-  position: absolute;
-  top: 34%;
-  left: 1%;
-  display: grid;
-  width: 98%;
-  align-items: center;
-  grid-template-columns: 5.5cqw 10cqw 7cqw 19cqw 17cqw 19cqw 17cqw;
+.lane-label {
+  fill: #98a1af;
+  font-size: 12px;
+  letter-spacing: 2.2px;
 }
 
-.microphone {
-  position: relative;
-  width: 5cqw;
-  height: 9cqh;
+.route-label,
+.protocol-label {
+  paint-order: stroke;
+  stroke: rgb(255 255 255 / 96%);
+  stroke-width: 11px;
+  stroke-linejoin: round;
 }
 
-.mic-head {
-  position: absolute;
-  top: 0;
-  left: 1.45cqw;
-  width: 2.2cqw;
-  height: 5.4cqh;
-  border-radius: 2cqw;
-  background: #969da5;
+.protocol-label {
+  fill: #40506a;
+  font-size: 12px;
+  letter-spacing: 1.6px;
 }
 
-.mic-stand {
-  position: absolute;
-  top: 5cqh;
-  left: 0.8cqw;
-  width: 3.5cqw;
-  height: 2.5cqh;
-  border-bottom: 0.35cqh solid #696f77;
-  border-left: 0.2cqw solid #696f77;
-  border-right: 0.2cqw solid #696f77;
-  border-radius: 0 0 2cqw 2cqw;
+.node-bg {
+  fill: #fff;
+  stroke: #cbd2dc;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 7px 10px rgb(28 39 56 / 7%));
 }
 
-.mic-stand::after {
-  position: absolute;
-  top: 2.5cqh;
-  left: 1.5cqw;
-  width: 0.2cqw;
-  height: 2cqh;
-  background: #696f77;
-  content: "";
+.core .node-bg {
+  fill: #f4f6f9;
+  stroke: #8e99a8;
+  stroke-width: 2;
 }
 
-.laptop {
-  position: relative;
-  width: 6.5cqw;
-  height: 8.5cqh;
+.node.focused .node-bg {
+  fill: #283b5d;
+  stroke: #283b5d;
+  stroke-width: 2;
 }
 
-.screen {
-  position: absolute;
-  left: 0.6cqw;
-  width: 5.3cqw;
-  height: 6.7cqh;
-  border: 0.4cqw solid #535961;
-  border-radius: 0.5cqw;
-  background: #59a8d9;
+.node-title {
+  fill: #202a38;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.25px;
 }
 
-.base {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 6.5cqw;
-  height: 1.1cqh;
-  background: #cdd1d6;
-  clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
+.node-detail {
+  fill: #6a7483;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-.arrow {
-  position: relative;
-  height: 2px;
-  background: #8894a3;
+.node.focused .node-title,
+.node.focused .node-detail {
+  fill: #fff;
 }
 
-.arrow span {
-  position: absolute;
-  bottom: 0.75cqh;
-  left: 50%;
-  padding: 0 0.3cqw;
-  background: rgb(255 255 255 / 94%);
-  transform: translateX(-50%);
-  white-space: nowrap;
+.node.focused .node-detail {
+  fill-opacity: 0.72;
 }
 
-.arrow::after {
-  position: absolute;
-  top: -5px;
-  right: -1px;
-  width: 0;
-  height: 0;
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-  border-left: 9px solid #8894a3;
-  content: "";
+.db-shape {
+  fill: #4d5663;
 }
 
-.arrow.left::after {
-  right: auto;
-  left: -1px;
-  border-right: 9px solid #8894a3;
-  border-left: 0;
+.db-divider {
+  fill: none;
+  stroke: #fff;
+  stroke-opacity: 0.55;
+  stroke-width: 1.5;
 }
 
-.duplex {
-  display: grid;
-  gap: 2.4cqh;
+.microphone rect {
+  fill: #8d97a5;
 }
 
-.client-flow {
-  position: absolute;
-  top: 57%;
-  left: 41%;
-  width: 30%;
-  height: 39%;
+.microphone path {
+  fill: none;
+  stroke: #647083;
+  stroke-width: 4;
+  stroke-linecap: round;
 }
 
-.socket-label {
-  position: absolute;
-  top: 0;
-  left: 34%;
-  padding: 0.45cqh 0.7cqw;
-  border: 1px solid #cad2dd;
-  border-radius: 0.4cqw;
-  background: #fff;
+.device-shell,
+.phone-shell {
+  fill: #3f4957;
 }
 
-.client-trunk {
-  position: absolute;
-  top: 6cqh;
-  left: 49%;
-  width: 2px;
-  height: 8cqh;
-  background: #8793a3;
-}
-
-.client-trunk::after {
-  position: absolute;
-  top: 7.7cqh;
-  left: -10.5cqw;
-  width: 21cqw;
-  height: 5cqh;
-  border-top: 2px solid #8793a3;
-  border-right: 2px solid #8793a3;
-  border-left: 2px solid #8793a3;
-  border-radius: 1.2cqw 1.2cqw 0 0;
-  content: "";
-}
-
-.phones {
-  position: absolute;
-  top: 18cqh;
-  left: -1cqw;
-  display: flex;
-  width: 31cqw;
-  justify-content: space-between;
-}
-
-.phone {
-  display: grid;
-  gap: 1cqh;
-  text-align: center;
-}
-
+.device-screen,
 .phone-screen {
-  display: grid;
-  width: 4.1cqw;
-  height: 8.8cqh;
-  place-items: center;
-  border: 0.55cqw solid #4c5259;
-  border-radius: 0.65cqw;
-  background: #58a8d8;
-  color: white;
+  fill: #3153a4;
+}
+
+.laptop-base {
+  fill: #aeb7c3;
+}
+
+.phone-home {
+  fill: #7f8996;
+}
+
+.language {
+  fill: #fff;
   font-family: "Zen Kaku Gothic New", sans-serif;
-  font-weight: 800;
-}
-
-.token-flow {
-  position: absolute;
-  top: 25%;
-  left: 24%;
-  display: flex;
-  width: 29%;
-  align-items: center;
-  gap: 0.8cqw;
-  color: #536170;
-}
-
-.token-line {
-  width: 8cqw;
-  height: 2px;
-  background: #8894a3;
+  font-size: 25px;
+  font-weight: 700;
 }
 </style>
