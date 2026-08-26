@@ -20,54 +20,33 @@ defineProps({
           <strong>専用 SQLite</strong>
         </div>
       </div>
-      <p class="identity-kicker">ステートフルなサーバーレス</p>
+      <p class="concept-kicker">ステートフルなサーバーレス</p>
     </div>
 
     <div v-else-if="kind === 'bridge'" class="bridge">
-      <div class="endpoint browser">
-        <strong>Admin</strong>
-        <small>WebSocket client</small>
-      </div>
-      <div class="socket-line two-way"><span>WebSocket</span></div>
-      <div class="object-card compact">
-        <span class="hex">DO</span>
-        <strong>EventSession</strong>
-        <small>server + client</small>
-      </div>
-      <div class="socket-line two-way"><span>WebSocket</span></div>
-      <div class="endpoint api">
-        <strong>Translation API</strong>
-        <small>WebSocket server</small>
-      </div>
-    </div>
-
-    <div v-else-if="kind === 'live-state'" class="live-state">
-      <div class="audience">
-        <div
-          v-for="language in ['JA', 'EN', 'ZH']"
-          :key="language"
-          class="viewer"
-        >
-          {{ language }}
+      <div class="bridge-flow">
+        <div class="endpoint browser">
+          <strong>Admin</strong>
+          <small>WebSocket client</small>
+        </div>
+        <div class="socket-line two-way"><span>WebSocket</span></div>
+        <div class="object-card compact">
+          <span class="hex">DO</span>
+          <strong>EventSession</strong>
+          <small>server + client</small>
+        </div>
+        <div class="socket-line two-way"><span>WebSocket</span></div>
+        <div class="endpoint api">
+          <strong>Translation API</strong>
+          <small>WebSocket server</small>
         </div>
       </div>
-      <div class="socket-bus">
-        <span class="pulse"></span>
-        <span class="pulse delay"></span>
-      </div>
-      <div class="object-card state">
-        <span class="live-dot"></span>
-        <strong>EventSession</strong>
-        <div class="state-row"><span>admin</span><b>connected</b></div>
-        <div class="state-row"><span>audience</span><b>284</b></div>
-        <div class="state-row"><span>languages</span><b>3</b></div>
-      </div>
-      <div class="audio-stream">
-        <span
-          v-for="height in [35, 70, 45, 88, 52, 76, 38]"
-          :key="height"
-          :style="{ height: `${height}%` }"
-        ></span>
+      <div class="bridge-clients">
+        <div class="socket-line vertical two-way"><span>WebSocket</span></div>
+        <div class="endpoint attendees">
+          <strong>Audience</strong>
+          <small>WebSocket client</small>
+        </div>
       </div>
     </div>
 
@@ -193,7 +172,7 @@ defineProps({
   width: 100%;
 }
 
-.identity-kicker {
+.concept-kicker {
   margin: 0;
   color: var(--deck-blue);
   font-size: clamp(1.55rem, 2.5cqw, 3.1rem);
@@ -294,12 +273,27 @@ defineProps({
   width: 93%;
   align-items: center;
   grid-template-columns: 1fr 0.7fr 1.1fr 0.7fr 1fr;
-  gap: 1.5cqw;
+  column-gap: 1.5cqw;
+}
+
+.bridge-flow {
+  display: contents;
+}
+
+.bridge-clients {
+  display: grid;
+  grid-column: 3;
+  justify-items: stretch;
+  padding-top: 1.2cqh;
+}
+
+.bridge-clients .endpoint {
+  min-height: 14cqh;
 }
 
 .endpoint {
   display: grid;
-  min-height: 20cqh;
+  min-height: 16cqh;
   align-content: center;
   justify-items: center;
   gap: 0.8cqh;
@@ -344,128 +338,39 @@ defineProps({
   transform: translateX(-50%);
 }
 
-.live-state {
-  display: grid;
-  width: 90%;
-  align-items: center;
-  grid-template-columns: 0.8fr 0.55fr 1.2fr 0.75fr;
-  gap: 2.2cqw;
+.socket-line.vertical {
+  width: 4px;
+  height: 11cqh;
+  justify-self: center;
 }
 
-.audience {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1cqw;
+.socket-line.vertical::before,
+.socket-line.vertical::after {
+  top: auto;
+  border: none;
 }
 
-.viewer {
-  display: grid;
-  width: 5cqw;
-  height: 5cqw;
-  place-items: center;
-  border-radius: 50%;
-  background: #eef3ff;
-  color: var(--deck-blue);
-  font-weight: 800;
+.socket-line.vertical::before {
+  top: -1px;
+  left: -6px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 12px solid var(--deck-blue);
 }
 
-.socket-bus {
-  position: relative;
-  height: 5px;
-  background: var(--deck-blue);
+.socket-line.vertical::after {
+  bottom: -1px;
+  left: -6px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 12px solid var(--deck-blue);
 }
 
-.socket-bus::before,
-.socket-bus::after {
-  position: absolute;
-  top: -5px;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: var(--deck-blue);
-  content: "";
-}
-
-.socket-bus::before {
-  left: 0;
-}
-
-.socket-bus::after {
-  right: 0;
-}
-
-.pulse {
-  position: absolute;
-  top: -0.8cqw;
-  left: 25%;
-  width: 1.6cqw;
-  height: 1.6cqw;
-  border: 3px solid #7597e8;
-  border-radius: 50%;
-  animation: pulse 1.8s infinite;
-}
-
-.pulse.delay {
-  left: 68%;
-  animation-delay: 0.9s;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0;
-    transform: scale(0.4);
-  }
-  40% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.7);
-  }
-}
-
-.state {
-  min-height: 34cqh;
-}
-
-.state-row {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  gap: 1cqw;
-  padding-top: 1cqh;
-  border-top: 1px solid #f0d4c1;
-}
-
-.state-row b {
-  color: #2c7b61;
-}
-
-.live-dot {
-  position: absolute;
-  top: 1.5cqh;
-  right: 1.2cqw;
-  width: 1cqw;
-  height: 1cqw;
-  border-radius: 50%;
-  background: #2fc686;
-  box-shadow: 0 0 0 0.45cqw rgb(47 198 134 / 14%);
-}
-
-.audio-stream {
-  display: flex;
-  height: 18cqh;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45cqw;
-}
-
-.audio-stream span {
-  width: 0.55cqw;
-  min-height: 8%;
-  border-radius: 1cqw;
-  background: linear-gradient(#7aa1ff, var(--deck-blue));
+.socket-line.vertical span {
+  left: calc(100% + 0.9cqw);
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
 }
 
 .scale {

@@ -190,14 +190,6 @@ class: full
 
 ---
 
-<!-- 17 -->
-<div class="concept-slide">
-  <h2>👉 複数方向のWebSocketと<br>ライブ中の状態を管理できる</h2>
-  <DurableConcept kind="live-state" />
-</div>
-
----
-
 <!-- 18 -->
 <div class="concept-slide">
   <h2>イベントIDごとに固有のインスタンスが<br>立ち上がる <span class="check">✓</span></h2>
