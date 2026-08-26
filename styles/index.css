@@ -277,22 +277,33 @@ html .slidev-layout .profile-copy p {
   display: flex;
   height: 100%;
   flex-direction: column;
-  justify-content: center;
-  gap: 5cqh;
-  padding: 0 2%;
+  justify-content: flex-start;
+  gap: 5.5cqh;
+  padding: 1% 2% 0;
 }
 
-.bullet-slide ul {
+html .slidev-layout .bullet-slide h2 {
+  font-size: clamp(3.4rem, 5.8cqw, 7.2rem);
+}
+
+html .slidev-layout .bullet-slide ul {
   display: grid;
-  padding-left: 1.2em;
-  gap: 2.2cqh;
+  padding-left: 1.15em;
+  gap: 3.1cqh;
+  list-style: disc;
 }
 
-.bullet-slide li {
+html .slidev-layout .bullet-slide li {
   color: #050505;
   font-family: var(--deck-sans);
-  font-size: clamp(1.55rem, 2.55cqw, 3.25rem);
+  font-size: clamp(2.2rem, 3.7cqw, 4.7rem);
   font-weight: 700;
+  line-height: 1.38;
+}
+
+.bullet-slide li::marker {
+  color: #111;
+  font-size: 0.78em;
 }
 
 .future-list {

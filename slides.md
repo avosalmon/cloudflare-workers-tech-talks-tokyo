@@ -237,8 +237,8 @@ class: full
   <ul>
     <li>ローカルで簡単に動かせる（wrangler dev）</li>
     <li>デプロイがめっちゃ簡単（wrangler deploy）</li>
-    <li>インスタンスごとにprivateなSQLiteに状態を永続化</li>
     <li>使っていない間はhibernateする</li>
+    <li>インスタンスごとに専用のSQLiteに状態を永続化</li>
   </ul>
 </div>
 
