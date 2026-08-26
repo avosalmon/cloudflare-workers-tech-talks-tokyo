@@ -438,96 +438,9 @@ openの直後にtokenとevent詳細を送る。
 class: dark code-stage tight
 ---
 
-<!-- 32 -->
-
-```ts
-export class EventSession extends DurableObject<Env> {
-  async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
-    const connection = ws.deserializeAttachment() as { authenticated: boolean };
-
-    if (!connection.authenticated) {
-      if (typeof message !== "string") {
-        ws.close(4401, "Unauthorized");
-        return;
-      }
-
-      const data = JSON.parse(message);
-
-      if (data.type !== "auth") {
-        ws.close(4401, "Unauthorized");
-        return;
-      }
-
-      const payload = await verifyJwt(data.token);
-
-      if (!payload || payload.event_id !== this.ctx.id.name) {
-        ws.close(4403, "Forbidden");
-        return;
-      }
-
-      ws.serializeAttachment({ authenticated: true });
-      this.connectToTranslationApi(payload.languages);
-      ws.send(JSON.stringify({ type: "status", status: "authenticated" }));
-      return;
-    }
-
-    this.sendAudioToTranslationApi(message);
-  }
-}
-```
-
-<!--
-DOのtoken verification。
-Hibernation APIではaddEventListenerは使わない。受信はwebSocketMessageに届き、コネクションのメタデータはdeserializeAttachmentで取れる。
--->
-
----
-class: dark code-stage tight
----
-
-<!-- 33 -->
-
-```ts {5-17}
-export class EventSession extends DurableObject<Env> {
-  async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
-    const connection = ws.deserializeAttachment() as { authenticated: boolean };
-
-    if (!connection.authenticated) {
-      if (typeof message !== "string") {
-        ws.close(4401, "Unauthorized");
-        return;
-      }
-
-      const data = JSON.parse(message);
-      if (data.type !== "auth") {
-        ws.close(4401, "Unauthorized");
-        return;
-      }
-
-      const payload = await verifyJwt(data.token);
-      if (!payload || payload.event_id !== this.ctx.id.name) {
-        ws.close(4403, "Forbidden");
-        return;
-      }
-
-      ws.serializeAttachment({ authenticated: true });
-      this.connectToTranslationApi(payload.languages);
-      ws.send(JSON.stringify({ type: "status", status: "authenticated" }));
-      return;
-    }
-
-    this.sendAudioToTranslationApi(message);
-  }
-}
-```
-
----
-class: dark code-stage tight
----
-
 <!-- 34 -->
 
-```ts {18-29}
+```ts
 export class EventSession extends DurableObject<Env> {
   async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
     const connection = ws.deserializeAttachment() as { authenticated: boolean };
@@ -654,7 +567,7 @@ class: dark code-stage compact
 
 <!-- 40 -->
 
-```ts
+```ts {all|13}
 private translationSockets = new Map<string, WebSocket>()
 
 private connectToTranslationApi(languages: string[]) {
@@ -711,88 +624,9 @@ class: dark code-stage tight
 
 <!-- 42 -->
 
-```ts
+```ts {all|2,12-23|2-10}
 export class EventSession extends DurableObject<Env> {
-  private clients = new Map<
-    WebSocket,
-    { authenticated: boolean; language?: string }
-  >();
-
-  constructor(ctx: DurableObjectState, env: Env) {
-    super(ctx, env);
-
-    for (const ws of this.ctx.getWebSockets()) {
-      this.clients.set(ws, ws.deserializeAttachment());
-    }
-  }
-
-  async fetch(request: Request): Promise<Response> {
-    const lang = new URL(request.url).searchParams.get("lang") ?? undefined;
-    const pair = new WebSocketPair();
-    const [client, server] = Object.values(pair);
-    const state = { authenticated: false, language: lang };
-
-    this.ctx.acceptWebSocket(server);
-    server.serializeAttachment(state);
-    this.clients.set(server, state);
-
-    return new Response(null, { status: 101, webSocket: client });
-  }
-}
-```
-
-<!--
-hibernationから起き上がる
--->
-
----
-class: dark code-stage tight
----
-
-<!-- 43 -->
-
-```ts {16-27}
-export class EventSession extends DurableObject<Env> {
-  private clients = new Map<
-    WebSocket,
-    { authenticated: boolean; language?: string }
-  >();
-
-  constructor(ctx: DurableObjectState, env: Env) {
-    super(ctx, env);
-
-    for (const ws of this.ctx.getWebSockets()) {
-      this.clients.set(ws, ws.deserializeAttachment());
-    }
-  }
-
-  async fetch(request: Request): Promise<Response> {
-    const lang = new URL(request.url).searchParams.get("lang") ?? undefined;
-    const pair = new WebSocketPair();
-    const [client, server] = Object.values(pair);
-    const state = { authenticated: false, language: lang };
-
-    this.ctx.acceptWebSocket(server);
-    server.serializeAttachment(state);
-    this.clients.set(server, state);
-
-    return new Response(null, { status: 101, webSocket: client });
-  }
-}
-```
-
----
-class: dark code-stage tight
----
-
-<!-- 44 -->
-
-```ts {7-13}
-export class EventSession extends DurableObject<Env> {
-  private clients = new Map<
-    WebSocket,
-    { authenticated: boolean; language?: string }
-  >();
+  private clients = new Map<WebSocket, { authenticated: boolean; language?: string }>();
 
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
