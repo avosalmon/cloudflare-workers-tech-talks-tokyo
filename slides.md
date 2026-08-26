@@ -115,13 +115,15 @@ class: full
 ---
 
 <!-- 11 -->
-<h2>Laravel にはほぼ全部ある</h2>
-<div class="feature-grid">
-  <div v-for="feature in [
-    'Auth', 'ORM', 'Cache', 'Queue', 'Validation',
-    'WebSocket', 'Notification', 'Task Scheduling', 'Billing', 'File Storage',
-    'AI SDK', 'Localization', 'Testing', 'Inertia.js', 'Vite Plugin',
-  ]" :key="feature" class="feature-chip">{{ feature }}</div>
+<div class="feature-slide">
+  <h2>Laravel にはほぼ全部ある</h2>
+  <div class="feature-grid">
+    <div v-for="feature in [
+      'Auth', 'ORM', 'Cache', 'Queue', 'Validation',
+      'WebSocket', 'Notification', 'Task Scheduling', 'Billing', 'File Storage',
+      'AI SDK', 'Localization', 'Testing', 'Inertia.js', 'Vite Plugin',
+    ]" :key="feature" class="feature-chip">{{ feature }}</div>
+  </div>
 </div>
 
 <!--

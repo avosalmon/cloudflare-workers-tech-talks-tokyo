@@ -251,18 +251,29 @@ html .slidev-layout .profile-copy p {
   font-size: clamp(3.5rem, 6.3cqw, 7.5rem);
 }
 
+.feature-slide {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  grid-template-rows: auto 1fr;
+  gap: 6cqh;
+}
+
 .feature-grid {
   display: grid;
-  margin-top: 5cqh;
+  height: 100%;
+  min-height: 0;
   grid-template-columns: repeat(5, 1fr);
-  gap: 3.4cqh 4cqw;
+  align-content: space-between;
+  gap: 0 3.2cqw;
 }
 
 .feature-chip {
   display: grid;
-  min-height: 10cqh;
+  min-height: 16cqh;
   place-items: center;
-  padding: 1.1cqh 1cqw;
+  padding: 1.4cqh 1cqw;
   border: 2px solid #a8a8a8;
   border-radius: 1rem;
   background: rgb(255 255 255 / 82%);
@@ -502,8 +513,12 @@ html .slidev-layout .closing .url {
 }
 
 @media (max-height: 600px) {
-  .feature-grid {
-    gap: 2.2cqh 3cqw;
+  .feature-slide {
+    gap: 2.5cqh;
+  }
+
+  .feature-chip {
+    min-height: 11cqh;
   }
 
   .bullet-slide {
