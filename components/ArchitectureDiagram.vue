@@ -37,30 +37,26 @@ const uid = useId();
         </marker>
       </defs>
 
-      <text class="lane-label" x="470" y="39">APPLICATION</text>
-      <text class="lane-label" x="475" y="234">REALTIME PIPELINE</text>
-      <text class="lane-label" x="410" y="484">LIVE AUDIENCE</text>
-
       <!-- Control flow: admin → Laravel → Postgres. -->
       <path
         class="connector"
-        d="M254 278V102Q254 91 265 91H470"
+        d="M254 278V102Q254 91 265 91H550"
         :marker-end="`url(#${uid}-arrow)`"
       />
       <path
         class="connector return"
-        d="M470 132H296Q278 132 278 150V278"
+        d="M550 132H296Q278 132 278 150V278"
         :marker-end="`url(#${uid}-arrow)`"
       />
-      <text class="route-label" x="351" y="77" text-anchor="middle">
+      <text class="route-label" x="408" y="77" text-anchor="middle">
         START TRANSLATION
       </text>
-      <text class="route-label" x="374" y="157" text-anchor="middle">
+      <text class="route-label" x="423" y="157" text-anchor="middle">
         WEBSOCKET URL + TOKEN
       </text>
       <path
         class="connector"
-        d="M670 111H790"
+        d="M750 111H792"
         :marker-end="`url(#${uid}-arrow)`"
       />
 
@@ -75,82 +71,101 @@ const uid = useId();
       <!-- Browser ⇄ Durable Object. -->
       <path
         class="connector data"
-        d="M315 296H475"
+        d="M315 296H525"
         :marker-end="`url(#${uid}-arrow)`"
       />
       <path
         class="connector return"
-        d="M475 344H315"
+        d="M525 344H315"
         :marker-end="`url(#${uid}-arrow)`"
       />
-      <text class="route-label" x="395" y="279" text-anchor="middle">AUDIO</text>
-      <text class="protocol-label" x="395" y="324" text-anchor="middle">
-        WEBSOCKET
-      </text>
-      <text class="route-label" x="395" y="370" text-anchor="middle">
+      <text class="route-label" x="420" y="279" text-anchor="middle">AUDIO</text>
+      <g class="protocol">
+        <rect x="372" y="309" width="96" height="22" rx="11" />
+        <text x="420" y="324" text-anchor="middle">WebSocket</text>
+      </g>
+      <text class="route-label" x="420" y="370" text-anchor="middle">
         TRANSLATION
       </text>
 
       <!-- Durable Object ⇄ translation service. -->
       <path
         class="connector data"
-        d="M705 296H940"
+        d="M755 296H940"
         :marker-end="`url(#${uid}-arrow)`"
       />
       <path
         class="connector return"
-        d="M940 344H705"
+        d="M940 344H755"
         :marker-end="`url(#${uid}-arrow)`"
       />
-      <text class="route-label" x="822" y="279" text-anchor="middle">AUDIO</text>
-      <text class="protocol-label" x="822" y="324" text-anchor="middle">
-        WEBSOCKET
-      </text>
-      <text class="route-label" x="822" y="370" text-anchor="middle">
+      <text class="route-label" x="848" y="279" text-anchor="middle">AUDIO</text>
+      <g class="protocol">
+        <rect x="800" y="309" width="96" height="22" rx="11" />
+        <text x="848" y="324" text-anchor="middle">WebSocket</text>
+      </g>
+      <text class="route-label" x="848" y="370" text-anchor="middle">
         TRANSLATION
       </text>
 
       <!-- Durable Object → attendee fan-out. -->
-      <path class="connector" d="M590 375V444Q590 454 580 454H442" />
-      <path class="connector" d="M590 454H738Q748 454 748 464V490" />
+      <path class="connector" d="M640 375V454" />
+      <path class="connector" d="M492 454H798" />
       <path
         class="connector"
-        d="M442 454V490"
+        d="M492 454V490"
         :marker-end="`url(#${uid}-arrow)`"
       />
       <path
         class="connector"
-        d="M590 454V490"
+        d="M640 454V490"
         :marker-end="`url(#${uid}-arrow)`"
       />
       <path
         class="connector"
-        d="M748 464V490"
+        d="M798 454V490"
         :marker-end="`url(#${uid}-arrow)`"
       />
-      <text class="protocol-label" x="590" y="430" text-anchor="middle">
-        WEBSOCKET
-      </text>
+      <g class="protocol">
+        <rect x="592" y="403" width="96" height="22" rx="11" />
+        <text x="640" y="418" text-anchor="middle">WebSocket</text>
+      </g>
 
       <!-- Laravel application -->
       <g class="node" :class="{ focused: focus === 'web' }">
-        <rect class="node-bg" x="470" y="61" width="200" height="100" rx="14" />
-        <text class="node-title" x="495" y="104">Web App</text>
-        <text class="node-detail" x="495" y="132">
-          {{ labels ? "Laravel / Inertia / React" : "Laravel application" }}
+        <rect class="node-bg" x="550" y="61" width="200" height="100" rx="14" />
+        <text
+          class="node-title"
+          x="650"
+          :y="labels ? 104 : 120"
+          text-anchor="middle"
+        >
+          Web App
+        </text>
+        <text
+          v-if="labels"
+          class="node-detail"
+          x="650"
+          y="132"
+          text-anchor="middle"
+        >
+          Laravel / Inertia / React
         </text>
       </g>
 
       <!-- Postgres -->
-      <g class="node database">
-        <rect class="node-bg" x="790" y="61" width="190" height="100" rx="14" />
-        <g transform="translate(812 80)">
+      <g class="database">
+        <g transform="translate(788 70) scale(1.45)">
           <ellipse class="db-shape" cx="27" cy="10" rx="25" ry="9" />
           <path class="db-shape" d="M2 10v36c0 5 11 10 25 10s25-5 25-10V10" />
-          <path class="db-divider" d="M2 23c0 5 11 10 25 10s25-5 25-10M2 36c0 5 11 10 25 10s25-5 25-10" />
+          <path
+            class="db-divider"
+            d="M2 23c0 5 11 10 25 10s25-5 25-10M2 36c0 5 11 10 25 10s25-5 25-10"
+          />
         </g>
-        <text class="node-title" x="882" y="105">Postgres</text>
-        <text class="node-detail" x="882" y="132">Application data</text>
+        <text class="node-title" x="827" y="176" text-anchor="middle">
+          Postgres
+        </text>
       </g>
 
       <!-- Microphone -->
@@ -170,23 +185,35 @@ const uid = useId();
       </g>
 
       <!-- Durable Object -->
-      <g class="node core" :class="{ focused: focus === 'durable' }">
-        <rect class="node-bg" x="475" y="255" width="230" height="120" rx="16" />
-        <text class="node-title" x="503" y="306">WebSocket Server</text>
-        <text class="node-detail" x="503" y="337">
-          {{ labels ? "Workers + Durable Objects" : "Durable Object per event" }}
+      <g class="node" :class="{ focused: focus === 'durable' }">
+        <rect class="node-bg" x="525" y="255" width="230" height="120" rx="16" />
+        <text
+          class="node-title"
+          x="640"
+          :y="labels ? 306 : 323"
+          text-anchor="middle"
+        >
+          WebSocket Server
+        </text>
+        <text
+          v-if="labels"
+          class="node-detail"
+          x="640"
+          y="337"
+          text-anchor="middle"
+        >
+          Workers + Durable Objects
         </text>
       </g>
 
       <!-- Translation service -->
       <g class="node" :class="{ focused: focus === 'api' }">
         <rect class="node-bg" x="940" y="255" width="220" height="120" rx="16" />
-        <text class="node-title" x="968" y="306">Translation API</text>
-        <text class="node-detail" x="968" y="337">Speech → translated text</text>
+        <text class="node-title" x="968" y="323">Translation API</text>
       </g>
 
       <!-- Audience devices -->
-      <g class="phone" transform="translate(410 490)">
+      <g class="phone" transform="translate(460 490)">
         <rect class="phone-shell" width="64" height="96" rx="10" />
         <rect class="phone-screen" x="7" y="8" width="50" height="69" rx="4" />
         <circle class="phone-home" cx="32" cy="87" r="3" />
@@ -195,7 +222,7 @@ const uid = useId();
           JAPANESE
         </text>
       </g>
-      <g class="phone" transform="translate(558 490)">
+      <g class="phone" transform="translate(608 490)">
         <rect class="phone-shell" width="64" height="96" rx="10" />
         <rect class="phone-screen" x="7" y="8" width="50" height="69" rx="4" />
         <circle class="phone-home" cx="32" cy="87" r="3" />
@@ -204,7 +231,7 @@ const uid = useId();
           CHINESE
         </text>
       </g>
-      <g class="phone" transform="translate(716 490)">
+      <g class="phone" transform="translate(766 490)">
         <rect class="phone-shell" width="64" height="96" rx="10" />
         <rect class="phone-screen" x="7" y="8" width="50" height="69" rx="4" />
         <circle class="phone-home" cx="32" cy="87" r="3" />
@@ -251,7 +278,6 @@ marker path {
 
 .lane-label,
 .route-label,
-.protocol-label,
 .device-label {
   fill: #697486;
   font-size: 13px;
@@ -265,18 +291,24 @@ marker path {
   letter-spacing: 2.2px;
 }
 
-.route-label,
-.protocol-label {
+.route-label {
   paint-order: stroke;
   stroke: rgb(255 255 255 / 96%);
   stroke-width: 11px;
   stroke-linejoin: round;
 }
 
-.protocol-label {
-  fill: #40506a;
-  font-size: 12px;
-  letter-spacing: 1.6px;
+.protocol rect {
+  fill: #eef2f6;
+  stroke: #c5ced8;
+  stroke-width: 1;
+}
+
+.protocol text {
+  fill: #4a5568;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .node-bg {
@@ -284,12 +316,6 @@ marker path {
   stroke: #cbd2dc;
   stroke-width: 1.5;
   filter: drop-shadow(0 7px 10px rgb(28 39 56 / 7%));
-}
-
-.core .node-bg {
-  fill: #f4f6f9;
-  stroke: #8e99a8;
-  stroke-width: 2;
 }
 
 .node.focused .node-bg {
