@@ -367,7 +367,7 @@ server.serializeAttachment({ authenticated: false }); // コネクションに�
   <div class="auth-snippet">
 
 ```js
-// This won’t work in browser
+// This won’t work in browser 😢
 new WebSocket(url, {
   headers: { Authorization: "Bearer ..." },
 });
