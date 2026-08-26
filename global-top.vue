@@ -377,7 +377,7 @@ onBeforeUnmount(() => {
 
 .translation-viewport {
   display: flex;
-  height: 3lh;
+  height: 2lh;
   flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
