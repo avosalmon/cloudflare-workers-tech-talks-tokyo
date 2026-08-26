@@ -86,7 +86,7 @@ defineProps({
       <div
         v-for="event in [
           { id: 'tokyo-2026', people: '284', color: 'blue' },
-          { id: 'laracon-au', people: '412', color: 'orange' },
+          { id: 'laracon-us', people: '412', color: 'orange' },
           { id: 'paris-meetup', people: '96', color: 'green' },
         ]"
         :key="event.id"
@@ -108,7 +108,7 @@ defineProps({
         <span class="continent asia"></span>
         <span class="region west">SFO</span>
         <span class="region eu">FRA</span>
-        <span class="region jp active">NRT</span>
+        <span class="region jp active">Tokyo</span>
       </div>
       <div class="first-request">
         <span>最初のリクエスト</span>
@@ -117,7 +117,7 @@ defineProps({
       <div class="placement-arrow"></div>
       <div class="object-card map-card">
         <span class="hex">DO</span>
-        <strong>近いロケーションに配置</strong>
+        <strong>近いロケーションに<br>配置</strong>
       </div>
     </div>
 
@@ -169,6 +169,10 @@ defineProps({
   gap: 3cqw;
 }
 
+.instances {
+  grid-template-columns: 1.15fr 0.55fr 1.15fr;
+}
+
 .id-list {
   display: grid;
   gap: 1.4cqh;
@@ -183,6 +187,16 @@ defineProps({
   color: var(--deck-blue);
   font-family: var(--deck-mono);
   font-weight: 700;
+}
+
+.instances .request-pill {
+  display: grid;
+  min-height: 20cqh;
+  place-items: center;
+  padding: 2.6cqh 1.8cqw;
+  border-radius: 1.2cqw;
+  font-size: clamp(1.1rem, 1.7cqw, 2.2rem) !important;
+  text-align: center;
 }
 
 .route-arrow {
@@ -537,20 +551,33 @@ defineProps({
 
 .region.jp {
   top: 36%;
-  left: 78%;
+  left: 72%;
 }
 
 .region.active {
+  width: auto;
+  min-width: 6.4cqw;
+  height: 3.8cqw;
+  padding: 0 0.85cqw;
   background: var(--deck-orange);
   box-shadow: 0 0 0 0.75cqw rgb(246 130 31 / 20%);
+  font-size: clamp(0.72rem, 1cqw, 1.3rem) !important;
 }
 
 .first-request {
   display: grid;
   justify-items: center;
-  gap: 1cqh;
+  gap: 1.2cqh;
   color: var(--deck-blue);
   text-align: center;
+}
+
+.first-request span {
+  font-size: clamp(1.05rem, 1.5cqw, 2rem) !important;
+}
+
+.first-request strong {
+  font-size: clamp(1.7rem, 2.7cqw, 3.5rem);
 }
 
 .placement-arrow {

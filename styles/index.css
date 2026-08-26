@@ -372,6 +372,13 @@ html .slidev-layout .bullet-slide li {
   font-size: clamp(2rem, 3.65cqw, 4.5rem);
 }
 
+.heading-with-mark {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  column-gap: 0.28em;
+}
+
 .check {
   display: inline-grid;
   width: 1.05em;

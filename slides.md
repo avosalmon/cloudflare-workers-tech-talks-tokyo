@@ -184,7 +184,7 @@ class: full
 
 <!-- 16 -->
 <div class="concept-slide">
-  <h2>WebSocketサーバーとクライアントの<br>両方になれる <span class="check">✓</span></h2>
+  <h2>WebSocket サーバーとクライアントの<br>両方になれる <span class="check">✓</span></h2>
   <DurableConcept kind="bridge" />
 </div>
 
@@ -208,7 +208,10 @@ class: full
 
 <!-- 19 -->
 <div class="concept-slide">
-  <h2>👉 複数イベントが同時に開催されても<br>問題なく捌ける</h2>
+  <h2 class="heading-with-mark">
+    <span class="heading-mark">👉</span>
+    <span>複数イベントが同時に開催されても<br>問題なくスケールする</span>
+  </h2>
   <DurableConcept kind="scale" />
 </div>
 
@@ -222,7 +225,7 @@ class: full
 
 <!-- 20 -->
 <div class="concept-slide">
-  <h2>最初のリクエストに近いデータセンターで<br>インスタンスが立ち上がる <span class="check">✓</span></h2>
+  <h2>最初のリクエストに近いデータセンターに<br>インスタンスが配置される <span class="check">✓</span></h2>
   <DurableConcept kind="placement" />
 </div>
 
