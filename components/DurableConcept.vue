@@ -122,18 +122,32 @@ defineProps({
     </div>
 
     <div v-else-if="kind === 'latency'" class="latency">
-      <div class="globe-ring">
-        <span class="city tokyo">Tokyo</span>
-        <span class="city sydney">Sydney</span>
-        <span class="city paris">Paris</span>
-        <span class="city sf">SF</span>
-        <div class="object-card compact center-object">
+      <div class="latency-stage">
+        <div class="latency-globe">
+          <div class="globe-land">
+            <span class="land americas"></span>
+            <span class="land europe"></span>
+            <span class="land africa"></span>
+            <span class="land asia"></span>
+            <svg class="japan-islands" viewBox="0 0 64 90" aria-hidden="true">
+              <ellipse cx="36" cy="13" rx="11" ry="8" transform="rotate(18 36 13)" />
+              <ellipse cx="24" cy="44" rx="11" ry="25" transform="rotate(30 24 44)" />
+              <ellipse cx="14" cy="64" rx="5.5" ry="3.4" transform="rotate(12 14 64)" />
+              <ellipse cx="10" cy="74" rx="7" ry="8.5" transform="rotate(18 10 74)" />
+            </svg>
+            <span class="land australia"></span>
+          </div>
+          <span class="city-pin sf"><i></i>SF</span>
+          <span class="city-pin paris"><i></i>Paris</span>
+          <span class="city-pin sydney"><i></i>Sydney</span>
+          <span class="city-pin tokyo"><i></i><em>Tokyo</em></span>
+        </div>
+        <div class="object-card compact globe-do">
           <span class="hex">DO</span>
-          <strong>nearest</strong>
+          <strong>Tokyo</strong>
         </div>
       </div>
       <div class="latency-meter">
-        <span class="meter-label">round trip</span>
         <strong>low latency</strong>
         <span class="meter-bar"></span>
       </div>
@@ -593,80 +607,170 @@ defineProps({
 
 .latency {
   display: grid;
-  width: 85%;
+  width: 92%;
   align-items: center;
-  grid-template-columns: 1.35fr 0.65fr;
-  gap: 7cqw;
+  grid-template-columns: 1.35fr 0.75fr;
+  gap: 5cqw;
 }
 
-.globe-ring {
+.latency-stage {
   position: relative;
-  width: 36cqw;
-  height: 36cqw;
-  max-height: 54cqh;
-  max-width: 54cqh;
-  border: 3px dashed #91a6cd;
+  width: min(46cqw, 62cqh);
+  height: min(46cqw, 62cqh);
+}
+
+.latency-globe {
+  position: absolute;
+  inset: 4%;
+  overflow: visible;
   border-radius: 50%;
 }
 
-.center-object {
+.globe-land {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  min-width: 12cqw;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #edf5ff, #d8e8fa);
+  box-shadow: inset 0 0 0 0.28cqw rgb(49 83 164 / 16%);
 }
 
-.city {
+.land {
+  position: absolute;
+  background: #a9c3d9;
+}
+
+.city-pin {
   position: absolute;
   z-index: 2;
-  padding: 0.8cqh 0.8cqw;
-  border: 2px solid #c5d0e5;
-  border-radius: 2cqw;
-  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.45cqw;
   color: var(--deck-blue);
   font-weight: 800;
+  font-size: clamp(0.85rem, 1.2cqw, 1.55rem) !important;
 }
 
-.city.tokyo {
-  top: 5%;
-  right: 0;
-  border-color: var(--deck-orange);
+.city-pin i {
+  width: 0.85cqw;
+  height: 0.85cqw;
+  flex-shrink: 0;
+  border: 0.18cqw solid #fff;
+  border-radius: 50%;
+  background: #8092aa;
+  box-shadow: 0 0 0 0.12cqw rgb(49 83 164 / 18%);
 }
 
-.city.sydney {
-  right: 0;
-  bottom: 7%;
+.latency-globe .land.americas {
+  top: 28%;
+  left: 9%;
+  width: 18%;
+  height: 42%;
+  border-radius: 60% 35% 55% 45%;
+  transform: rotate(-12deg);
 }
 
-.city.paris {
-  bottom: 3%;
-  left: 2%;
+.latency-globe .land.europe {
+  top: 22%;
+  left: 42%;
+  width: 10%;
+  height: 13%;
+  border-radius: 48% 55% 42% 50%;
 }
 
-.city.sf {
-  top: 8%;
-  left: 0;
+.latency-globe .land.africa {
+  top: 38%;
+  left: 43%;
+  width: 9%;
+  height: 22%;
+  border-radius: 45% 50% 40% 55%;
+}
+
+.latency-globe .land.asia {
+  top: 17%;
+  left: 51%;
+  width: 20%;
+  height: 27%;
+  border-radius: 42% 32% 48% 52%;
+}
+
+.japan-islands {
+  position: absolute;
+  top: 29%;
+  left: 74%;
+  width: 14%;
+  height: 27%;
+  overflow: visible;
+  fill: #a9c3d9;
+}
+
+.latency-globe .land.australia {
+  top: 60%;
+  left: 76%;
+  width: 11%;
+  height: 13%;
+  border-radius: 50% 45% 55% 40%;
+}
+
+.city-pin.sf {
+  top: 36%;
+  left: 12%;
+}
+
+.city-pin.paris {
+  top: 24%;
+  left: 43%;
+}
+
+.city-pin.sydney {
+  top: 64%;
+  left: 78%;
+}
+
+.city-pin.tokyo {
+  top: 41%;
+  left: 77.8%;
+  color: var(--deck-orange);
+}
+
+.city-pin.tokyo em {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.3cqw);
+  font-style: normal;
+  font-weight: 800;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.city-pin.tokyo i {
+  background: var(--deck-orange);
+  box-shadow: 0 0 0 0.45cqw rgb(246 130 31 / 22%);
+}
+
+.globe-do {
+  position: absolute;
+  z-index: 3;
+  right: -10%;
+  top: 58%;
+  min-width: 11cqw;
 }
 
 .latency-meter {
   display: grid;
-  gap: 2cqh;
+  gap: 1.6cqh;
 }
 
 .latency-meter strong {
   color: var(--deck-blue);
-  font-size: clamp(1.8rem, 3cqw, 3.8rem);
-}
-
-.meter-label {
-  color: #748297;
-  font-family: var(--deck-mono);
+  font-size: clamp(2.1rem, 3.6cqw, 4.6rem);
+  line-height: 1;
 }
 
 .meter-bar {
   width: 100%;
   height: 1.8cqh;
+  margin-top: 0.6cqh;
   border-radius: 2cqw;
   background: linear-gradient(90deg, #31bd82 0 28%, #e9edf3 28%);
 }
