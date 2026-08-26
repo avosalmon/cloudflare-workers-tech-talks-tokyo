@@ -7,7 +7,7 @@ info: |
   Cloudflare Workers Tech Talks in Tokyo #8
 aspectRatio: 16/9
 canvasWidth: 1920
-transition: fade-out
+transition: fade
 mdc: true
 layout: default
 ---
