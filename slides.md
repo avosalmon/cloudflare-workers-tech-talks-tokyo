@@ -282,11 +282,11 @@ class: dark code-stage compact
 
 <!-- 25 -->
 
-```ts
+```ts {all|14-15|17}
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
-    const match = url.pathname.match(/^\/events\/([^/]+)$/);
+    const match = url.pathname.match(/^\/events\/([^/]+)$/); // /events/1234567890
 
     if (!match) {
       return new Response("Not Found", { status: 404 });
@@ -323,7 +323,7 @@ export class EventSession extends DurableObject<Env> {
     const pair = new WebSocketPair();
     const [client, server] = Object.values(pair);
 
-    this.ctx.acceptWebSocket(server);
+    this.ctx.acceptWebSocket(server); // server.accept()
     server.serializeAttachment({ authenticated: false });
 
     return new Response(null, { status: 101, webSocket: client });
@@ -407,6 +407,8 @@ class: dark code-stage compact
 <!-- 31 -->
 
 ```ts
+// Admin page
+
 const ws = new WebSocket(websocketUrl);
 
 ws.addEventListener("open", () => {
