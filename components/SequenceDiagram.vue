@@ -17,10 +17,10 @@ defineProps({
         <div>Durable Object</div>
       </div>
       <div class="lanes four">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+        <div style="--end: 8"></div>
+        <div style="--end: 3"></div>
+        <div style="--end: 5"></div>
+        <div style="--end: 8"></div>
       </div>
       <div class="messages four">
         <div class="message c1-c2 row1 right">
@@ -51,10 +51,10 @@ defineProps({
         <div>Durable Object</div>
       </div>
       <div class="lanes four">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+        <div style="--end: 7"></div>
+        <div style="--end: 3"></div>
+        <div style="--end: 5"></div>
+        <div style="--end: 7"></div>
       </div>
       <div class="messages four">
         <div class="message c1-c2 row1 right"><b>GET</b> /events/{id}/live</div>
@@ -77,9 +77,9 @@ defineProps({
         <div>Translation API</div>
       </div>
       <div class="lanes three">
-        <div></div>
-        <div></div>
-        <div></div>
+        <div style="--end: 8"></div>
+        <div style="--end: 8"></div>
+        <div style="--end: 8"></div>
       </div>
       <div class="messages three">
         <div class="message c2-c1 row1 left">
@@ -104,19 +104,21 @@ defineProps({
         <div>Attendee</div>
       </div>
       <div class="lanes four">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+        <div style="--end: 8"></div>
+        <div style="--end: 8"></div>
+        <div style="--end: 4"></div>
+        <div style="--end: 8"></div>
       </div>
       <div class="messages four">
         <div class="message c1-c2 row1 right">binary audio</div>
         <div class="message c2-c3 row2 right">binary audio × N</div>
         <div class="message c3-c2 row3 left">
-          { language: <mark>"ja"</mark> }
+          { language: <mark>"ja"</mark>, data:
+          <mark>"translated text..."</mark> }
         </div>
         <div class="message c2-c4 row5 right">
-          { type: <mark>"translation"</mark>, language: <mark>"ja"</mark> }
+          { language: <mark>"ja"</mark>, data:
+          <mark>"translated text..."</mark> }
         </div>
         <div class="note c4 row5-note">?lang=ja</div>
         <div class="callout">en の結果は ja 購読者には送らない</div>
@@ -163,40 +165,31 @@ defineProps({
   font-weight: 700;
 }
 
-.lanes {
-  position: absolute;
-  z-index: 0;
-  top: 8%;
-  bottom: 4%;
-  left: 5%;
-  display: grid;
-  width: 90%;
-}
-
-.lanes > div {
-  position: relative;
-}
-
-.lanes > div::before {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
-  background: rgb(207 221 236 / 72%);
-  transform: translateX(-50%);
-  content: "";
-}
-
+.lanes,
 .messages {
   position: absolute;
-  z-index: 2;
-  top: 10%;
-  bottom: 4%;
+  top: 8%;
+  bottom: 7%;
   left: 5%;
   display: grid;
   width: 90%;
   grid-template-rows: repeat(8, 1fr);
+}
+
+.lanes {
+  z-index: 0;
+}
+
+.lanes > div {
+  grid-column: var(--col, auto);
+  grid-row: var(--start, 1) / var(--end, 9);
+  justify-self: center;
+  width: 1px;
+  background: rgb(186 202 220 / 28%);
+}
+
+.messages {
+  z-index: 2;
 }
 
 .message {
@@ -205,7 +198,7 @@ defineProps({
   align-self: center;
   margin-inline: calc(50% / var(--span));
   padding: 0 1.8cqw 0.8cqh;
-  border-bottom: 2px solid #c8d5e5;
+  border-bottom: 1.5px solid rgb(184 198 214 / 55%);
   font-size: clamp(0.72rem, 1.12cqw, 1.46rem);
   white-space: nowrap;
 }
