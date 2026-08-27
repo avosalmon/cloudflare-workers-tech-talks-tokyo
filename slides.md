@@ -55,9 +55,11 @@ seoMeta:
 
 <!--
 Laravelはフレームワーク、エコシステム、会社
-APACチーム（Observabilityチーム）
+APACチーム（Laravel CloudのObservability機能を開発）
 唯一の日本人社員
+Cloudflare Workersあんまり使ったことない
 Laravelエンジニアの自分がなぜ今日ここにいるのか
+最近、Durable Objectsを使うきっかけがあった
 -->
 
 ---
@@ -86,6 +88,10 @@ class: full
   <img class="corner-logo" src="/assets/tech-world.png" alt="TECH WORLD">
 </div>
 
+<!--
+先週、このイベントのライブ配信をしてくれているTECH WORLDのチャンネルで、潜入レポートの動画が出た
+-->
+
 ---
 layout: full
 class: full
@@ -103,7 +109,7 @@ class: full
 <img class="full-bleed" src="/assets/live-translation.jpg" alt="Bilingual live translation at Laravel Live Japan">
 
 <!--
-日本人外国人関係なく全員が楽しめるイベントにしたかった
+グローバルなイベントなので、日本人外国人関係なく全員が楽しめるイベントにしたかった
 ライブ翻訳が必須 → 自分で作った
 全てのセッションに日英のライブ翻訳を提供
 会場スクリーンや参加者のスマホで見られる
@@ -170,6 +176,7 @@ Queue
 <ArchitectureDiagram focus="durable" />
 
 <!--
+WebSocketサーバーどうしよう
 LaravelにはReverbという公式のWebSocketサーバーがあるが、ReverbはLaravelで発生したイベントをチャンネルへ配信するPusher互換サーバー。
 YOYOには、複数方向のWebSocketとライブ中の状態を管理するサーバーが必要。
 自前でPHPのWebSocketサーバーを作ることもできるけど、インフラどうする？

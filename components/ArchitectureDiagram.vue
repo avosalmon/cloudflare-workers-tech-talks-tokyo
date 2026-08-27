@@ -13,6 +13,23 @@ defineProps({
 });
 
 const uid = useId();
+
+const edges = [
+  { d: "M122 321H205", delay: "0s", type: "audio" },
+  { d: "M254 278V102Q254 91 265 91H550", delay: "0.75s", type: "control" },
+  { d: "M750 111H792", delay: "1.15s", type: "control" },
+  { d: "M550 132H296Q278 132 278 150V278", delay: "1.45s", type: "return" },
+  { d: "M315 296H525", delay: "2.15s", type: "audio" },
+  { d: "M755 296H940", delay: "2.7s", type: "audio" },
+  { d: "M940 344H755", delay: "3.4s", type: "return" },
+  { d: "M525 344H315", delay: "3.95s", type: "return" },
+  { d: "M640 375V454", delay: "3.95s", type: "broadcast", arrow: false },
+  { d: "M640 454H492", delay: "4.3s", type: "broadcast", arrow: false },
+  { d: "M640 454H798", delay: "4.3s", type: "broadcast", arrow: false },
+  { d: "M492 454V490", delay: "4.6s", type: "broadcast" },
+  { d: "M640 454V490", delay: "4.6s", type: "broadcast" },
+  { d: "M798 454V490", delay: "4.6s", type: "broadcast" },
+];
 </script>
 
 <template>
@@ -37,48 +54,33 @@ const uid = useId();
         </marker>
       </defs>
 
-      <!-- Control flow: admin → Laravel → Postgres. -->
-      <path
-        class="connector"
-        d="M254 278V102Q254 91 265 91H550"
-        :marker-end="`url(#${uid}-arrow)`"
-      />
-      <path
-        class="connector return"
-        d="M550 132H296Q278 132 278 150V278"
-        :marker-end="`url(#${uid}-arrow)`"
-      />
+      <g class="edges">
+        <g v-for="(edge, i) in edges" :key="i">
+          <path
+            class="connector"
+            :class="edge.type"
+            :d="edge.d"
+            :marker-end="
+              edge.arrow === false ? undefined : `url(#${uid}-arrow)`
+            "
+          />
+          <path
+            class="flow"
+            :class="edge.type"
+            :d="edge.d"
+            pathLength="1"
+            :style="{ '--t': edge.delay }"
+          />
+        </g>
+      </g>
+
       <text class="route-label" x="408" y="77" text-anchor="middle">
         START TRANSLATION
       </text>
       <text class="route-label" x="423" y="157" text-anchor="middle">
         WEBSOCKET URL + TOKEN
       </text>
-      <path
-        class="connector"
-        d="M750 111H792"
-        :marker-end="`url(#${uid}-arrow)`"
-      />
-
-      <!-- Audio enters the browser. -->
-      <path
-        class="connector"
-        d="M122 321H205"
-        :marker-end="`url(#${uid}-arrow)`"
-      />
       <text class="route-label" x="164" y="304" text-anchor="middle">AUDIO</text>
-
-      <!-- Browser ⇄ Durable Object. -->
-      <path
-        class="connector data"
-        d="M315 296H525"
-        :marker-end="`url(#${uid}-arrow)`"
-      />
-      <path
-        class="connector return"
-        d="M525 344H315"
-        :marker-end="`url(#${uid}-arrow)`"
-      />
       <text class="route-label" x="420" y="279" text-anchor="middle">AUDIO</text>
       <g class="protocol">
         <rect x="372" y="309" width="96" height="22" rx="11" />
@@ -87,18 +89,6 @@ const uid = useId();
       <text class="route-label" x="420" y="370" text-anchor="middle">
         TRANSLATION
       </text>
-
-      <!-- Durable Object ⇄ translation service. -->
-      <path
-        class="connector data"
-        d="M755 296H940"
-        :marker-end="`url(#${uid}-arrow)`"
-      />
-      <path
-        class="connector return"
-        d="M940 344H755"
-        :marker-end="`url(#${uid}-arrow)`"
-      />
       <text class="route-label" x="848" y="279" text-anchor="middle">AUDIO</text>
       <g class="protocol">
         <rect x="800" y="309" width="96" height="22" rx="11" />
@@ -107,25 +97,6 @@ const uid = useId();
       <text class="route-label" x="848" y="370" text-anchor="middle">
         TRANSLATION
       </text>
-
-      <!-- Durable Object → attendee fan-out. -->
-      <path class="connector" d="M640 375V454" />
-      <path class="connector" d="M492 454H798" />
-      <path
-        class="connector"
-        d="M492 454V490"
-        :marker-end="`url(#${uid}-arrow)`"
-      />
-      <path
-        class="connector"
-        d="M640 454V490"
-        :marker-end="`url(#${uid}-arrow)`"
-      />
-      <path
-        class="connector"
-        d="M798 454V490"
-        :marker-end="`url(#${uid}-arrow)`"
-      />
       <g class="protocol">
         <rect x="592" y="403" width="96" height="22" rx="11" />
         <text x="640" y="418" text-anchor="middle">WebSocket</text>
@@ -271,8 +242,56 @@ const uid = useId();
   stroke-linejoin: round;
 }
 
-.connector.return {
+.connector.return,
+.connector.broadcast {
   stroke-dasharray: 5 5;
+}
+
+.flow {
+  fill: none;
+  stroke: #3153a4;
+  stroke-width: 3.6;
+  stroke-linecap: round;
+  stroke-dasharray: 0.2 1;
+  stroke-dashoffset: 0.2;
+  opacity: 0;
+  filter: drop-shadow(0 0 3.5px rgb(49 83 164 / 60%));
+  animation: packet 6.6s linear infinite;
+  animation-delay: var(--t, 0s);
+}
+
+.flow.return,
+.flow.broadcast {
+  stroke: #f6821f;
+  filter: drop-shadow(0 0 3.5px rgb(246 130 31 / 60%));
+}
+
+@keyframes packet {
+  0%,
+  1.5% {
+    stroke-dashoffset: 0.2;
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+    stroke-dashoffset: 0.18;
+  }
+  15% {
+    stroke-dashoffset: -1;
+    opacity: 1;
+  }
+  17%,
+  100% {
+    stroke-dashoffset: -1;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow {
+    animation: none;
+    display: none;
+  }
 }
 
 marker path {
