@@ -5,11 +5,24 @@ titleTemplate: "%s — Cloudflare Workers Tech Talks in Tokyo #8"
 info: |
   Ryuta Hamasaki
   Cloudflare Workers Tech Talks in Tokyo #8
+author: Ryuta Hamasaki
+keywords: Laravel, Durable Objects, Cloudflare Workers, WebSocket, live translation
 aspectRatio: 16/9
 canvasWidth: 1920
 transition: fade
 mdc: true
 layout: default
+seoMeta:
+  ogTitle: Laravel × Durable Objectsで実現するイベント向けライブ翻訳
+  ogDescription: Cloudflare Workers Tech Talks in Tokyo #8。Laravel と Durable Objects で、イベント向けライブ翻訳を作る話。
+  ogImage: auto
+  ogUrl: https://avosalmon.github.io/cloudflare-workers-tech-talks-tokyo/
+  twitterCard: summary_large_image
+  twitterTitle: Laravel × Durable Objectsで実現するイベント向けライブ翻訳
+  twitterDescription: Cloudflare Workers Tech Talks in Tokyo #8。Laravel と Durable Objects で、イベント向けライブ翻訳を作る話。
+  twitterImage: ./og-image.png
+  twitterSite: avosalmon
+  twitterUrl: https://avosalmon.github.io/cloudflare-workers-tech-talks-tokyo/
 ---
 
 <!-- 01 -->
