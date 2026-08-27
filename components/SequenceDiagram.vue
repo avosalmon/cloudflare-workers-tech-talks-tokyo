@@ -121,7 +121,7 @@ defineProps({
           <mark>"translated text..."</mark> }
         </div>
         <div class="note c4 row5-note">?lang=ja</div>
-        <div class="callout row6">en の結果は ja 購読者には送らない</div>
+        <div class="callout row6">en の結果は ja 選択者には送らない</div>
       </div>
     </template>
   </div>
