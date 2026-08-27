@@ -200,6 +200,12 @@ class: full
   <DurableConcept kind="identity" />
 </div>
 
+<!--
+Workers はステートレスです。同じコードでも、リクエストのたびに別の場所で動きます。メモリに「今このイベントで何が起きているか」を置けません。
+Durable Objects はその逆です。ID を渡すと、世界に1つだけその ID のインスタンスができます。その中に実行環境と、自分専用の SQLite が付いてきます。同じ ID で呼べば、必ずそこに届きます。
+つまり「ステートフルなサーバーレス」です。
+-->
+
 ---
 
 <!-- 16 -->
@@ -207,6 +213,10 @@ class: full
   <h2>WebSocket サーバーとクライアントの<br>両方になれる <span class="check">✓</span></h2>
   <DurableConcept kind="bridge" />
 </div>
+
+<!--
+WebSocketに対応していて、WebSocketサーバーにもクライアントにもなれる
+-->
 
 ---
 
@@ -401,6 +411,8 @@ class: dark code-stage compact
 <!-- 30 -->
 
 ```php
+// POST /events/{event_id}/translation/start
+
 class EventTranslationController
 {
     public function start(Event $event): JsonResponse
@@ -707,8 +719,8 @@ hibernationから起き上がるときにconstructorが呼ばれる
 </div>
 
 <!--
-Railsでも何でも良い。
 メインのスタックがCloudflareじゃなくても、リアルタイムな機能とDOは相性が抜群。
+Railsでも何でも良い。
 -->
 
 ---
