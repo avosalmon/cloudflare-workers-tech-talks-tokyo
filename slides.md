@@ -55,11 +55,11 @@ seoMeta:
 
 <!--
 Laravelはフレームワーク、エコシステム、会社
-APACチーム（Laravel CloudのObservability機能を開発）
-唯一の日本人社員
+OSSのフレームワークやパッケージのほかに、Laravel Cloudというホスティングプラットフォームも提供している
+世界中に社員がいて、唯一の日本人社員として、オーストラリアのチームで、Observability機能を開発している
 Cloudflare Workersあんまり使ったことない
 Laravelエンジニアの自分がなぜ今日ここにいるのか
-最近、Durable Objectsを使うきっかけがあった
+実は最近、あることがきっかけで、CloudflareのDurable Objectsを使った
 -->
 
 ---
@@ -390,7 +390,7 @@ new WebSocket(url, {
 
 <!--
 なんでAuthorizationヘッダーでtokenを送らないのか。
-ブラウザのWebSocketはカスタムヘッダーを送れない。
+ブラウザのWebSocket APIはカスタムヘッダーを送れない。
 サーバーサイドJSだと可能。
 -->
 
@@ -580,7 +580,7 @@ class: dark code-stage tight
 
 <!-- 39 -->
 
-```ts {23}
+```ts {all|23}
 export class EventSession extends DurableObject<Env> {
   async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
     const connection = ws.deserializeAttachment() as { authenticated: boolean };
@@ -613,13 +613,18 @@ export class EventSession extends DurableObject<Env> {
 }
 ```
 
+<!--
+adminのコネクションを認証したあと、翻訳APIに接続
+JWTのpayloadに、そのイベントで対応する言語のリストがある
+-->
+
 ---
 class: dark code-stage compact
 ---
 
 <!-- 40 -->
 
-```ts {all|13}
+```ts {all|12-14}
 private translationSockets = new Map<string, WebSocket>()
 
 private connectToTranslationApi(languages: string[]) {
@@ -639,9 +644,10 @@ private connectToTranslationApi(languages: string[]) {
 ```
 
 <!--
-Translation APIのWSコネクション。
-outboundのWebSocketはhibernateできないので標準のWebSocket API。
+翻訳APIのWSコネクション。
+WebSocketクライアントとしてのコネクションはhibernateできないので標準のWebSocket API。
 ライブ中はDOが起き続ける。休憩でこの接続を閉じると、参加者の接続は残したままhibernateできる。
+翻訳APIからメッセージがくると、その言語を選択しているクライアントに配信する
 -->
 
 ---
@@ -667,7 +673,7 @@ private broadcastToClients(language: string, data: string) {
 ```
 
 <!--
-Translation APIからの翻訳結果を配信
+各クライアントのコネクションをmetadataとともに、this.clientsというmapに保存している
 -->
 
 ---
@@ -704,6 +710,7 @@ export class EventSession extends DurableObject<Env> {
 ```
 
 <!--
+hibernateすると、メモリ上の状態はリセットされる
 hibernationから起き上がるときにconstructorが呼ばれる
 -->
 
@@ -725,7 +732,7 @@ hibernationから起き上がるときにconstructorが呼ばれる
 </div>
 
 <!--
-まだDurableじゃない。
+実はまだDurableじゃない。SQLite使ってない。
 途中参加者へ直近の翻訳結果を配信。
 イベント終了時にLaravelのPostgresに保存。
 -->
