@@ -289,6 +289,8 @@ Outbound WS connectionはhibernateしない。
 WebSocketサーバー：Cloudflare Workers + DO
 その他全てはLaravel（ユーザー管理、認証、イベント管理、メール送信、課金）
 Laravelアプリ、Postgres、Cache、ファイルストレージ、Queueなど、Laravel Cloudでホスティング
+ここから、それぞれのWSコネクションをDOがどのようにハンドリングしているのか見ていく。
+まず、Adminのフロー。
 -->
 
 ---
@@ -299,7 +301,6 @@ class: dark
 <SequenceDiagram kind="admin" />
 
 <!--
-Adminのフロー。
 LaravelがHTTPで認可し、JWTを渡す。
 ブラウザがeventId付きのWSを開く。
 最初のメッセージでJWTを送り、DOが検証する。
@@ -463,8 +464,8 @@ ws.addEventListener("message", ({ data }) => {
 ```
 
 <!--
-openの直後にtokenとevent詳細を送る。
-音声はDOからのreadyを待ってから送る。
+openの直後にtokenを送る。
+音声はDOからのauthenticatedを待ってから送る。
 -->
 
 ---
@@ -475,6 +476,7 @@ class: dark code-stage tight
 
 ```ts
 export class EventSession extends DurableObject<Env> {
+  // ws.addEventListener("message", (event) => ...)
   async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
     const connection = ws.deserializeAttachment() as { authenticated: boolean };
 
@@ -508,19 +510,32 @@ export class EventSession extends DurableObject<Env> {
 ```
 
 <!--
+Hibernation APIではaddEventListenerは使わない。
+受信はwebSocketMessageに届き、コネクションのメタデータはdeserializeAttachmentで取れる
 DOのtoken verification
+-->
+
+---
+
+<!-- 35 -->
+<ArchitectureDiagram labels focus="attendee" />
+
+<!--
+次は参加者のコネクション。
 -->
 
 ---
 class: dark
 ---
 
-<!-- 35 -->
+<!-- 36 -->
 <SequenceDiagram kind="attendee" />
 
 <!--
-参加者のコネクション。
-指定した言語。
+QRコードをスキャンすると、LaravelアプリにGETリクエストがいく
+Laravelから websocket_url をもらい、言語を指定して WS 接続する。
+認証はしない。未認証のまま attendee として扱う。
+未認証のコネクションからbinaryデータがきたらリジェクト
 -->
 
 ---
@@ -529,7 +544,7 @@ class: dark
 <ArchitectureDiagram labels focus="api" />
 
 <!--
-翻訳APIとのWebSocketコネクション。
+最後に翻訳APIとのWebSocketコネクション。
 DOはここで初めてクライアントになる。
 -->
 
@@ -541,7 +556,7 @@ class: dark
 <SequenceDiagram kind="translations" />
 
 <!--
-認証のあと、言語ごとに接続する
+adminが認証したあと、対応する出力言語ごとに接続する
 -->
 
 ---
@@ -552,7 +567,11 @@ class: dark
 <SequenceDiagram kind="broadcast" />
 
 <!--
-同じ音声を翻訳APIの全てのコネクションに転送し、返ってきた翻訳結果をlangが一致する参加者へ配信。
+そして、adminが音声を送ると、
+同じ音声を翻訳APIの全てのコネクションに転送。
+翻訳APIから返ってきた翻訳結果を言語ごとに参加者へ配信。
+日本語のテキストは日本語を選択しているデバイスに配信。
+英語のテキストは英語を選択しているデバイスに配信。
 -->
 
 ---

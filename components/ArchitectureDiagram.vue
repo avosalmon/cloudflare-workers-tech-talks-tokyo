@@ -187,7 +187,11 @@ const edges = [
       </g>
 
       <!-- Audience devices -->
-      <g class="phone" transform="translate(460 490)">
+      <g
+        class="phone"
+        :class="{ focused: focus === 'attendee' }"
+        transform="translate(460 490)"
+      >
         <rect class="phone-shell" width="64" height="96" rx="10" />
         <rect class="phone-screen" x="7" y="8" width="50" height="69" rx="4" />
         <circle class="phone-home" cx="32" cy="87" r="3" />
@@ -196,7 +200,11 @@ const edges = [
           JAPANESE
         </text>
       </g>
-      <g class="phone" transform="translate(608 490)">
+      <g
+        class="phone"
+        :class="{ focused: focus === 'attendee' }"
+        transform="translate(608 490)"
+      >
         <rect class="phone-shell" width="64" height="96" rx="10" />
         <rect class="phone-screen" x="7" y="8" width="50" height="69" rx="4" />
         <circle class="phone-home" cx="32" cy="87" r="3" />
@@ -205,7 +213,11 @@ const edges = [
           CHINESE
         </text>
       </g>
-      <g class="phone" transform="translate(766 490)">
+      <g
+        class="phone"
+        :class="{ focused: focus === 'attendee' }"
+        transform="translate(766 490)"
+      >
         <rect class="phone-shell" width="64" height="96" rx="10" />
         <rect class="phone-screen" x="7" y="8" width="50" height="69" rx="4" />
         <circle class="phone-home" cx="32" cy="87" r="3" />
@@ -411,6 +423,27 @@ marker path {
 
 .phone-home {
   fill: #7f8996;
+}
+
+.phone.focused .phone-shell {
+  fill: #283b5d;
+  filter: drop-shadow(0 6px 10px rgb(40 59 93 / 28%));
+}
+
+.phone.focused .phone-screen {
+  fill: #fff;
+}
+
+.phone.focused .language {
+  fill: #283b5d;
+}
+
+.phone.focused .phone-home {
+  fill: #9aa8bd;
+}
+
+.phone.focused .device-label {
+  fill: #283b5d;
 }
 
 .language {
